@@ -29,7 +29,7 @@ namespace ITVitaeChat.ChatCore.Services
 
         public async Task<bool> Register(User user)
         {
-            if (UserFilledIn(user) && ValidateUserValues(user.Name, user.DisplayName, user.Emailadres, user.Password) && ValidateEmailadres(user.Emailadres) && !userRepository.Contains(u => u.DisplayName.Equals(user.DisplayName) || u.Emailadres.Equals(user.Emailadres)).Result)
+            if (ValidateName(user.Name) && ValidateDisplayName(user.DisplayName) && ValidatePassword(user.Password) && ValidateEmailadres(user.Emailadres) && !userRepository.Contains(u => u.DisplayName.Equals(user.DisplayName) || u.Emailadres.Equals(user.Emailadres)).Result)
             {
                 user.PasswordSalt = hashAndSalt.GenerateSalt();
                 user.Password = hashAndSalt.Hash(user.Password, user.PasswordSalt);
@@ -74,13 +74,40 @@ namespace ITVitaeChat.ChatCore.Services
                 }
             }
         }
-        public Task<bool> Edit(uint id, string username, string password, string emailadress)
+        public async Task<bool> Edit(uint id, string displayName, string password, string emailadress)
         {
-            throw new NotImplementedException();
+            //check if displayname, password and emailadress are valid and not all three null. if not return false
+            if (!ValidateDisplayName(displayName, true) || !ValidatePassword(password, true) || !ValidateEmailadres(emailadress, true) || (displayName==null && password == null && emailadress == null))
+            {
+                return false;
+            }
+
+            //try to get the user from the repository, returning false if it can't be found
+            User user = await userRepository.Get(id);
+            if (user != null)
+            {
+                //checks if the repository contains a user that doesn't match the id but does match the displayname or emailadress, so the same user can keep the same values, but it can't have the values of another user. if such value already exists returns false
+                if (userRepository.Contains(u => u.Id.Equals(id) && (u.DisplayName.Equals(displayName)||u.Emailadres.Equals(emailadress))).Result)
+                {
+                    return false;
+                }
+                if (displayName != null)
+                    user.DisplayName = displayName;
+                if (emailadress != null)
+                    user.Emailadres = emailadress;
+                if (password != null)
+                    user.Password = hashAndSalt.Hash(password, user.PasswordSalt);
+                await userRepository.Edit(user);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
-        public Task<bool> Edit(User user)
+        public async Task<bool> Edit(User user)
         {
-            throw new NotImplementedException();
+            return await Edit(user.Id, user.DisplayName, user.Password, user.Emailadres);
         }
         public async Task<bool> Validate(uint id)
         {
@@ -99,7 +126,7 @@ namespace ITVitaeChat.ChatCore.Services
         public async Task<bool> Block(uint id)
         {
             User user = await userRepository.Get(id);
-            if(user != null)
+            if (user != null)
             {
                 user.Blocked = !user.Blocked;
                 await userRepository.Edit(user);
@@ -111,41 +138,72 @@ namespace ITVitaeChat.ChatCore.Services
             }
         }
 
-        private static bool UserFilledIn(User user)
+        private static bool ValidateName(string name, bool allowNull = false)
         {
-            return !string.IsNullOrWhiteSpace(user.Name) && !string.IsNullOrWhiteSpace(user.DisplayName) && !string.IsNullOrWhiteSpace(user.Emailadres) && !string.IsNullOrWhiteSpace(user.Password);
-        }
-        private static bool ValidateUserValues(string name, string displayName, string emailadres, string password)
-        {
-            return name.Length <= nameMaxLength && ValidateUserValues(displayName, emailadres, password);
-        }
-        private static bool ValidateUserValues(string displayName, string emailadres, string password)
-        {
-            return displayName.Length <= displayNameMaxLength && emailadres.Length <= emailadresMaxLength && password.Length <= passwordMaxLength;
-        }
-        private static bool ValidateEmailadres(string emailadres)
-        {
-            //Todo email validationcheck
-            if(!MailAddress.TryCreate(emailadres, out MailAddress mailAddress))
+            if (name == null && allowNull == true)
             {
-                return false;
+                return true;
             }
+            else
+            {
+                return !string.IsNullOrWhiteSpace(name) && name.Length <= nameMaxLength;
+            }
+        }
+        private static bool ValidateDisplayName(string displayName, bool allowNull = false)
+        {
+            if (displayName == null && allowNull == true)
+            {
+                return true;
+            }
+            else
+            {
+                return !string.IsNullOrWhiteSpace(displayName) && displayName.Length <= displayNameMaxLength;
+            }
+        }
+        private static bool ValidateEmailadres(string emailadres, bool allowNull = false)
+        {
+            if (emailadres == null && allowNull == true)
+            {
+                return true;
+            }
+            else
+            {
+                if (string.IsNullOrWhiteSpace(emailadres) || emailadres.Length > emailadresMaxLength)
+                {
+                    return false;
+                }
+                if (!MailAddress.TryCreate(emailadres, out MailAddress mailAddress))
+                {
+                    return false;
+                }
 
-            var hostParts = mailAddress.Host.Split('.');
-            if (hostParts.Length == 1)// checks if the host is missing a dot and is thus not valid
-            {
-                return false;
-            }
-            if (hostParts.Any(p => p == string.Empty))//checks if there's any empty strings between dots, which thus tests for if there are two donts next to each other. eg: something@somethi..ng
-            {
-                return false;
-            }
-            if (hostParts[^1].Length < 2 || hostParts[^1].Length > 3) //checks if the last element has not less then 2 and not more then 3 elements
-            {
-                return false;
-            }
+                var hostParts = mailAddress.Host.Split('.');
+                if (hostParts.Length == 1)// checks if the host is missing a dot and is thus not valid
+                {
+                    return false;
+                }
+                if (hostParts.Any(p => p == string.Empty))//checks if there's any empty strings between dots, which thus tests for if there are two donts next to each other. eg: something@somethi..ng
+                {
+                    return false;
+                }
+                if (hostParts[^1].Length < 2 || hostParts[^1].Length > 3) //checks if the last element has not less then 2 and not more then 3 elements
+                {
+                    return false;
+                }
 
-            return true;
+                return true;
+            }
+        }
+        private static bool ValidatePassword(string password, bool allowNull = false)
+        {
+            if (password == null && allowNull == true)
+            {
+                return true;
+            }
+            else
+            {
+                return !string.IsNullOrWhiteSpace(password) && password.Length <= passwordMaxLength;
+            }
         }
     }
 }

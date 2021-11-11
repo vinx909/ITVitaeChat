@@ -11,7 +11,7 @@ namespace ITVitaeChat.ChatCore.Interfaces
     public interface IUserService
     {
         public Task<bool> Register(User user);
-        public Task<bool> Edit(uint id, string username, string password, string emailadress);
+        public Task<bool> Edit(uint id, string displayName, string password, string emailadress);
         public Task<bool> Edit(User user);
         public Task<(LoginResult, User)> Login(string username, string password);
         public Task<bool> Block(uint id);
