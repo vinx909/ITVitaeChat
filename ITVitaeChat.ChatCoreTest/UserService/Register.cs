@@ -93,6 +93,51 @@ namespace ITVitaeChat.ChatCoreTest.UserService
             Assert.False(result);
         }
 
+        [Theory]
+        [InlineData("abc")]
+        [InlineData("@")]
+        [InlineData("@.")]
+        [InlineData("abc@.")]
+        [InlineData("abc@def")]
+        [InlineData("abc@def.")]
+        [InlineData("abc@.def")]
+        [InlineData("@abc.def")]
+        [InlineData("abc@def.g")]
+        [InlineData("abc@def.ghij")]
+        public void IncorrectEmailadressDoesNotPass(string emailadres)
+        {
+            //arrange
+            User user = new() { Name = "ghi", DisplayName = "jkl", Emailadres = emailadres, Password = "mno" };
+
+            //act
+            sut.Register(user).Wait();
+
+            //assert
+            userRepositoryMock.Verify(m => m.Add(user), Times.Never);
+        }
+        [Theory]
+        [InlineData("abc")]
+        [InlineData("@")]
+        [InlineData("@.")]
+        [InlineData("abc@.")]
+        [InlineData("abc@def")]
+        [InlineData("abc@def.")]
+        [InlineData("abc@.def")]
+        [InlineData("@abc.def")]
+        [InlineData("abc@def.g")]
+        [InlineData("abc@def.ghij")]
+        public void IncorrectEmailadressReturnsFalse(string emailadres)
+        {
+            //arrange
+            User user = new() { Name = "ghi", DisplayName = "jkl", Emailadres = emailadres, Password = "mno" };
+
+            //act
+            bool result = sut.Register(user).Result;
+
+            //assert
+            Assert.False(result);
+        }
+
         [Fact]
         public void DoesNotPassWithAlreadyExistingValues()
         {

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 using ITVitaeChat.ChatCore.Entities;
@@ -124,8 +126,26 @@ namespace ITVitaeChat.ChatCore.Services
         private static bool ValidateEmailadres(string emailadres)
         {
             //Todo email validationcheck
+            if(!MailAddress.TryCreate(emailadres, out MailAddress mailAddress))
+            {
+                return false;
+            }
+
+            var hostParts = mailAddress.Host.Split('.');
+            if (hostParts.Length == 1)// checks if the host is missing a dot and is thus not valid
+            {
+                return false;
+            }
+            if (hostParts.Any(p => p == string.Empty))//checks if there's any empty strings between dots, which thus tests for if there are two donts next to each other. eg: something@somethi..ng
+            {
+                return false;
+            }
+            if (hostParts[^1].Length < 2 || hostParts[^1].Length > 3) //checks if the last element has not less then 2 and not more then 3 elements
+            {
+                return false;
+            }
+
             return true;
         }
-
     }
 }
