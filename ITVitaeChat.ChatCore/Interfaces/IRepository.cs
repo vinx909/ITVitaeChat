@@ -13,7 +13,7 @@ namespace ITVitaeChat.ChatCore.Interfaces
         Task Add(T value);
         Task Edit(T value);
         Task<IEnumerable<T>> GetAll();
-        Task<T> Get(int id);
+        Task<T> Get(uint id);
         Task<T> Get(Expression<Func<T, bool>> query);
         Task<bool> Contains(Expression<Func<T, bool>> query);
     }

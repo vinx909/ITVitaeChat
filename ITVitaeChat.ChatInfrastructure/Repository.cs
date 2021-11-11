@@ -34,7 +34,7 @@ namespace ITVitaeChat.ChatInfrastructure
             return await dbContext.Set<T>().AnyAsync(query);
         }
 
-        public async Task<T> Get(int id)
+        public async Task<T> Get(uint id)
         {
             return await dbContext.Set<T>().FindAsync(id);
         }

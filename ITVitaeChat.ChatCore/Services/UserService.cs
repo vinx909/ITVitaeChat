@@ -72,7 +72,15 @@ namespace ITVitaeChat.ChatCore.Services
                 }
             }
         }
-        public async Task<bool> Validate(int id)
+        public Task<bool> Edit(uint id, string username, string password, string emailadress)
+        {
+            throw new NotImplementedException();
+        }
+        public Task<bool> Edit(User user)
+        {
+            throw new NotImplementedException();
+        }
+        public async Task<bool> Validate(uint id)
         {
             User user = await userRepository.Get(id);
             if (user != null)
@@ -86,7 +94,7 @@ namespace ITVitaeChat.ChatCore.Services
                 return false;
             }
         }
-        public async Task<bool> Block(int id)
+        public async Task<bool> Block(uint id)
         {
             User user = await userRepository.Get(id);
             if(user != null)
@@ -118,5 +126,6 @@ namespace ITVitaeChat.ChatCore.Services
             //Todo email validationcheck
             return true;
         }
+
     }
 }

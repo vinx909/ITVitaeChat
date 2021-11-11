@@ -27,7 +27,7 @@ namespace ITVitaeChat.ChatCore.Services
             return false;
         }
 
-        public async Task<Administrator> Get(int id)
+        public async Task<Administrator> Get(uint id)
         {
             return await administratorRepository.Get(id);
         }
