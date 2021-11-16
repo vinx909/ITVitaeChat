@@ -97,7 +97,7 @@ namespace ITVitaeChat.ChatCore.Services
                     user.Emailadres = emailadress;
                 if (password != null)
                     user.Password = hashAndSalt.Hash(password, user.PasswordSalt);
-                await userRepository.Edit(user);
+                await userRepository.Update(user);
                 return true;
             }
             else
@@ -115,7 +115,7 @@ namespace ITVitaeChat.ChatCore.Services
             if (user != null)
             {
                 user.Validated = true;
-                await userRepository.Edit(user);
+                await userRepository.Update(user);
                 return true;
             }
             else
@@ -129,7 +129,7 @@ namespace ITVitaeChat.ChatCore.Services
             if (user != null)
             {
                 user.Blocked = !user.Blocked;
-                await userRepository.Edit(user);
+                await userRepository.Update(user);
                 return true;
             }
             else
@@ -204,6 +204,11 @@ namespace ITVitaeChat.ChatCore.Services
             {
                 return !string.IsNullOrWhiteSpace(password) && password.Length <= passwordMaxLength;
             }
+        }
+
+        public async Task<bool> Exists(uint senderId)
+        {
+            return await userRepository.Contains(senderId);
         }
     }
 }

@@ -14,6 +14,7 @@ namespace ITVitaeChat.ChatInfrastructure.EntityConfigurations
     {
         private const string chatgroupTableName = "Chatgroups";
         private const int nameMaxLength = 255;
+        private const int passwordSaltMaxLength = 255;
         private const int passwordMaxLength = 255;
         private const int maxUsersDefaultValue = 0;
         private const ChatgroupVisibility visibilityDefaultValue = ChatgroupVisibility.Public;
@@ -25,8 +26,10 @@ namespace ITVitaeChat.ChatInfrastructure.EntityConfigurations
             builder.Property(c => c.Name).HasMaxLength(nameMaxLength).IsRequired();
             builder.Property(c => c.MaxUsers).IsRequired(false).HasDefaultValue(maxUsersDefaultValue);
             builder.Property(c => c.Visibility).IsRequired().HasDefaultValue(visibilityDefaultValue);
+            builder.Property(u => u.PasswordSalt).HasMaxLength(passwordSaltMaxLength).IsRequired(false);
             builder.Property(c => c.Password).HasMaxLength(passwordMaxLength).IsRequired(false);
             builder.HasOne(c => c.Moderator).WithMany().HasForeignKey(c => c.ModeratorId).IsRequired();
+            builder.Property(c => c.OneToOne).IsRequired();
         }
     }
 }

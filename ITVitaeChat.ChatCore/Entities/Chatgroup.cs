@@ -13,8 +13,10 @@ namespace ITVitaeChat.ChatCore.Entities
         public string Name { get; set; }
         public int MaxUsers { get; set; }
         public ChatgroupVisibility Visibility { get; set; }
+        public string PasswordSalt { get; set; }
         public string Password { get; set; }
         public uint ModeratorId { get; set; }
         public User Moderator { get; set; }
+        public bool OneToOne { get; set; }
     }
 }

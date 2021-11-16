@@ -14,6 +14,7 @@ namespace ITVitaeChat.ChatCore.Interfaces
         public Task<bool> Edit(uint id, string displayName, string password, string emailadress);
         public Task<bool> Edit(User user);
         public Task<(LoginResult, User)> Login(string username, string password);
+        public Task<bool> Exists(uint userId);
         public Task<bool> Block(uint id);
         public Task<bool> Validate(uint id);
     }

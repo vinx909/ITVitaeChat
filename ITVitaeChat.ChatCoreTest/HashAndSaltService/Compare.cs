@@ -13,7 +13,7 @@ namespace ITVitaeChat.ChatCoreTest.HashAndSaltService
         public void SameReturnsTrue()
         {
             //arrange
-            string sameString = "abc123";
+            const string sameString = "abc123";
             string salt = sut.GenerateSalt();
             string sameStringHashed = sut.Hash(sameString, salt);
 
@@ -27,8 +27,8 @@ namespace ITVitaeChat.ChatCoreTest.HashAndSaltService
         public void DifferentReturnsFalse()
         {
             //arrange
-            string differentStringOne = "abc123";
-            string differentStrintTwo = "def456";
+            const string differentStringOne = "abc123";
+            const string differentStrintTwo = "def456";
             string salt = sut.GenerateSalt();
             string sameStringHashed = sut.Hash(differentStrintTwo, salt);
 

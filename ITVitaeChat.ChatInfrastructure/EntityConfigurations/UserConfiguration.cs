@@ -15,6 +15,7 @@ namespace ITVitaeChat.ChatInfrastructure.EntityConfigurations
         private const int nameMaxLength = 255;
         private const int displayNameMaxLength = 255;
         private const int emailadresMaxLength = 255;
+        private const int passwordSaltMaxLength = 255;
         private const int passwordMaxLength = 255;
 
         public void Configure(EntityTypeBuilder<User> builder)
@@ -27,6 +28,7 @@ namespace ITVitaeChat.ChatInfrastructure.EntityConfigurations
             builder.HasIndex(u => u.DisplayName).IsUnique();
             builder.Property(u => u.Emailadres).HasMaxLength(emailadresMaxLength).IsRequired();
             builder.HasIndex(u => u.Emailadres).IsUnique();
+            builder.Property(u => u.PasswordSalt).HasMaxLength(passwordSaltMaxLength).IsRequired();
             builder.Property(u => u.Password).HasMaxLength(passwordMaxLength).IsRequired();
             builder.Property(u => u.Validated).IsRequired();
         }

@@ -19,7 +19,6 @@ namespace ITVitaeChat.ChatInfrastructure.EntityConfigurations
             builder.HasOne(c => c.User).WithMany().HasForeignKey(c => c.UserId);
             builder.HasOne(c => c.Chatgroup).WithMany().HasForeignKey(c => c.ChatgroupId);
             builder.HasKey(c => new { c.UserId, c.ChatgroupId });
-            builder.Property(c => c.OneToOne).IsRequired();
         }
     }
 }

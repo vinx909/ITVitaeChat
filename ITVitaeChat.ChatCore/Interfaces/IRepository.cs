@@ -10,11 +10,13 @@ namespace ITVitaeChat.ChatCore.Interfaces
 {
     public interface IRepository<T>
     {
-        Task Add(T value);
-        Task Edit(T value);
+        Task<uint?> Add(T value);
+        Task Update(T value);
+        Task Delete(T value);
         Task<IEnumerable<T>> GetAll();
         Task<T> Get(uint id);
         Task<T> Get(Expression<Func<T, bool>> query);
+        Task<bool> Contains(uint id);
         Task<bool> Contains(Expression<Func<T, bool>> query);
     }
 }

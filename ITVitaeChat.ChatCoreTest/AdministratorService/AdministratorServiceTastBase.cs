@@ -11,8 +11,8 @@ namespace ITVitaeChat.ChatCoreTest.AdministratorService
 {
     public abstract class AdministratorServiceTastBase
     {
-        protected IAdministratorService sut;
-        protected Mock<IRepository<Administrator>> administratorRepositoryMock;
+        protected readonly IAdministratorService sut;
+        protected readonly Mock<IRepository<Administrator>> administratorRepositoryMock;
 
         public AdministratorServiceTastBase()
         {

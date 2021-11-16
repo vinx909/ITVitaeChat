@@ -170,7 +170,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         {
             //arange
             User user = new() { Name = "abc", DisplayName = "def", Emailadres = "ghi@jkl.mno", Password = "pqr" };
-            string salt = "stu";
+            const string salt = "stu";
             hashAndSaltMock.Setup(m => m.GenerateSalt()).Returns(salt);
 
             //act
@@ -185,7 +185,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
             //arange
             const string password = "pqr";
             User user = new() { Name = "abc", DisplayName = "def", Emailadres = "ghi@jkl.mno", Password = password };
-            string salt = "stu";
+            const string salt = "stu";
             hashAndSaltMock.Setup(m => m.GenerateSalt()).Returns(salt);
             hashAndSaltMock.Setup(m => m.Hash(user.Password, salt));
 
@@ -200,8 +200,8 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         {
             //arange
             User user = new() { Name = "abc", DisplayName = "def", Emailadres = "ghi@jkl.mno", Password = "pqr" };
-            string salt = "stu";
-            string hashedPassword = "vwx";
+            const string salt = "stu";
+            const string hashedPassword = "vwx";
             hashAndSaltMock.Setup(m => m.GenerateSalt()).Returns(salt);
             hashAndSaltMock.Setup(m => m.Hash(user.Password, salt)).Returns(hashedPassword);
 

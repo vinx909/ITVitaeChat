@@ -11,9 +11,9 @@ namespace ITVitaeChat.ChatCoreTest.UserService
 {
     public abstract class UserServiceTestBase
     {
-        protected IUserService sut;
-        protected Mock<IRepository<User>> userRepositoryMock;
-        protected Mock<IHashAndSaltService> hashAndSaltMock;
+        protected readonly IUserService sut;
+        protected readonly Mock<IRepository<User>> userRepositoryMock;
+        protected readonly Mock<IHashAndSaltService> hashAndSaltMock;
 
         public UserServiceTestBase()
         {

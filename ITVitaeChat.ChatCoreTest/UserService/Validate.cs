@@ -37,7 +37,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
             sut.Validate(1).Wait();
 
             //assert
-            userRepositoryMock.Verify(m => m.Edit(user), Times.Once);
+            userRepositoryMock.Verify(m => m.Update(user), Times.Once);
         }
         [Fact]
         public void ValidateUserReturnsTrueOnSuccess()

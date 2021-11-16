@@ -9,7 +9,7 @@ namespace ITVitaeChat.ChatCoreTest.HashAndSaltService
 {
     public abstract class HashAndSaltServiceTestBase
     {
-        protected IHashAndSaltService sut;
+        protected readonly IHashAndSaltService sut;
 
         public HashAndSaltServiceTestBase()
         {
