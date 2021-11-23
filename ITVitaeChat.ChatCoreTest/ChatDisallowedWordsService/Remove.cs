@@ -17,7 +17,7 @@ namespace ITVitaeChat.ChatCoreTest.ChatDisallowedWordsService
         {
             //arrange
             const string toRemove = "a";
-            const uint id = 1;
+            const int id = 1;
             ChatDisallowedWord disallowedWord = new() { Id = id, Content = toRemove };
             disallowedWordsRepositoryMock.Setup(m => m.Get(It.IsAny<Expression<Func<ChatDisallowedWord, bool>>>())).Returns(Task.FromResult(disallowedWord));
 
@@ -33,7 +33,7 @@ namespace ITVitaeChat.ChatCoreTest.ChatDisallowedWordsService
         {
             //arrange
             const string toRemove = "a";
-            const uint id = 1;
+            const int id = 1;
             ChatDisallowedWord disallowedWord = new() { Id = id, Content = toRemove };
             disallowedWordsRepositoryMock.Setup(m => m.Get(It.IsAny<Expression<Func<ChatDisallowedWord, bool>>>())).Returns(Task.FromResult(disallowedWord));
 

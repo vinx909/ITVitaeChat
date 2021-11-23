@@ -13,6 +13,8 @@ namespace ITVitaeChat.ChatCore.Services
 {
     public class UserService : IUserService
     {
+        private const int generalGroupId = 1;
+
         private const int nameMaxLength = 255;
         private const int displayNameMaxLength = 255;
         private const int emailadresMaxLength = 255;
@@ -27,7 +29,11 @@ namespace ITVitaeChat.ChatCore.Services
             this.hashAndSalt = hashAndSalt;
         }
 
-        public async Task<bool> Register(User user)
+        public async Task<bool> Register(string name, string displayName, string emailadres, string password, IChatGroupUserService groupUserService = null)
+        {
+            return await Register(new() { Name = name, DisplayName = displayName, Emailadres = emailadres, Password = password}, groupUserService);
+        }
+        public async Task<bool> Register(User user, IChatGroupUserService groupUserService = null)
         {
             if (ValidateName(user.Name) && ValidateDisplayName(user.DisplayName) && ValidatePassword(user.Password) && ValidateEmailadres(user.Emailadres) && !userRepository.Contains(u => u.DisplayName.Equals(user.DisplayName) || u.Emailadres.Equals(user.Emailadres)).Result)
             {
@@ -35,7 +41,11 @@ namespace ITVitaeChat.ChatCore.Services
                 user.Password = hashAndSalt.Hash(user.Password, user.PasswordSalt);
                 user.Blocked = false;
                 user.Validated = false;
-                await userRepository.Add(user);
+                int? id = await userRepository.Add(user);
+                if(groupUserService != null && id != null)
+                {
+                    await groupUserService.Add(generalGroupId, (int)id);
+                }
                 return true;
             }
             return false;
@@ -74,7 +84,7 @@ namespace ITVitaeChat.ChatCore.Services
                 }
             }
         }
-        public async Task<bool> Edit(uint id, string displayName, string password, string emailadress)
+        public async Task<bool> Edit(int id, string displayName, string password, string emailadress)
         {
             //check if displayname, password and emailadress are valid and not all three null. if not return false
             if (!ValidateDisplayName(displayName, true) || !ValidatePassword(password, true) || !ValidateEmailadres(emailadress, true) || (displayName==null && password == null && emailadress == null))
@@ -109,7 +119,7 @@ namespace ITVitaeChat.ChatCore.Services
         {
             return await Edit(user.Id, user.DisplayName, user.Password, user.Emailadres);
         }
-        public async Task<bool> Validate(uint id)
+        public async Task<bool> Validate(int id)
         {
             User user = await userRepository.Get(id);
             if (user != null)
@@ -123,7 +133,7 @@ namespace ITVitaeChat.ChatCore.Services
                 return false;
             }
         }
-        public async Task<bool> Block(uint id)
+        public async Task<bool> Block(int id)
         {
             User user = await userRepository.Get(id);
             if (user != null)
@@ -206,9 +216,10 @@ namespace ITVitaeChat.ChatCore.Services
             }
         }
 
-        public async Task<bool> Exists(uint senderId)
+        public async Task<bool> Exists(int senderId)
         {
             return await userRepository.Contains(senderId);
         }
+
     }
 }

@@ -16,8 +16,8 @@ namespace ITVitaeChat.ChatCoreTest.ChatMessageService
         {
             //arrange
             const string content = "test message";
-            const uint senderId = 1;
-            const uint groupId = 1;
+            const int senderId = 1;
+            const int groupId = 1;
             groupUserServiceMock.Setup(m => m.Exists(groupId, senderId)).Returns(Task.FromResult(true));
             
 
@@ -33,8 +33,8 @@ namespace ITVitaeChat.ChatCoreTest.ChatMessageService
         {
             //arrange
             const string content = "test message";
-            const uint senderId = 1;
-            const uint groupId = 1;
+            const int senderId = 1;
+            const int groupId = 1;
             groupUserServiceMock.Setup(m => m.Exists(groupId, senderId)).Returns(Task.FromResult(true));
 
             //act
@@ -49,8 +49,8 @@ namespace ITVitaeChat.ChatCoreTest.ChatMessageService
         {
             //arrange
             const string content = "test message";
-            const uint senderId = 1;
-            const uint groupId = 1;
+            const int senderId = 1;
+            const int groupId = 1;
             groupUserServiceMock.Setup(m => m.Exists(groupId, senderId)).Returns(Task.FromResult(true));
 
             //act
@@ -67,8 +67,8 @@ namespace ITVitaeChat.ChatCoreTest.ChatMessageService
         {
             //arrange
             const string content = "test message";
-            const uint senderId = 1;
-            const uint groupId = 1;
+            const int senderId = 1;
+            const int groupId = 1;
             groupUserServiceMock.Setup(m => m.Exists(groupId, senderId)).Returns(Task.FromResult(false));
 
             //act
@@ -83,8 +83,8 @@ namespace ITVitaeChat.ChatCoreTest.ChatMessageService
         {
             //arrange
             const string content = "test message";
-            const uint senderId = 1;
-            const uint groupId = 1;
+            const int senderId = 1;
+            const int groupId = 1;
             groupUserServiceMock.Setup(m => m.Exists(groupId, senderId)).Returns(Task.FromResult(false));
 
             //act
@@ -100,8 +100,8 @@ namespace ITVitaeChat.ChatCoreTest.ChatMessageService
             //arrange
             const string content = "test message";
             const string cencorredMessage = ".... message";
-            const uint senderId = 1;
-            const uint groupId = 1;
+            const int senderId = 1;
+            const int groupId = 1;
             groupUserServiceMock.Setup(m => m.Exists(groupId, senderId)).Returns(Task.FromResult(true));
             disallowedWordsServiceMock.Setup(m => m.ContainsDisallowedWord(content)).Returns(Task.FromResult(true));
             disallowedWordsServiceMock.Setup(m => m.FilterDisallowedWords(content)).Returns(Task.FromResult(cencorredMessage));

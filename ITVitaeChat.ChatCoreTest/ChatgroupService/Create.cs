@@ -16,130 +16,155 @@ namespace ITVitaeChat.ChatCoreTest.ChatgroupService
         public void CorrectAddsGroup()
         {
             //arrange
-            uint? id = 1;
+            int? id = 1;
             const string name = "abc";
             const int maxUsers = 5;
-            const ChatgroupVisibility visibility = ChatgroupVisibility.Private;
+            const ChatGroupVisibility visibility = ChatGroupVisibility.Private;
             const string password = "def";
             const string passwordSalt = "ghi";
             const string passwordHashed = "jkl";
-            const uint userId = 1;
+            const int userId = 1;
             userServiceMock.Setup(m => m.Exists(userId)).Returns(Task.FromResult(true));
-            groupRepositoryMock.Setup(m => m.Add(It.IsAny<Chatgroup>())).Returns(Task.FromResult(id));
+            groupRepositoryMock.Setup(m => m.Add(It.IsAny<ChatGroup>())).Returns(Task.FromResult(id));
             hashAndSaltServiceMock.Setup(m => m.GenerateSalt()).Returns(passwordSalt);
             hashAndSaltServiceMock.Setup(m => m.Hash(password, passwordSalt)).Returns(passwordHashed);
 
             //act
-            sut.Create(name, maxUsers, visibility, password, userId).Wait();
+            sut.Create(name, maxUsers, visibility, password, userId, groupUserServiceMock.Object).Wait();
 
             //assert
-            groupRepositoryMock.Verify(m => m.Add(It.Is<Chatgroup>(g => g.Name.Equals(name) && g.MaxUsers.Equals(maxUsers) && g.Visibility.Equals(visibility) && g.PasswordSalt.Equals(passwordSalt) && g.Password.Equals(passwordHashed) && g.ModeratorId.Equals(userId))), Times.Once);
-            groupRepositoryMock.Verify(m => m.Add(It.IsAny<Chatgroup>()), Times.Once);
+            groupRepositoryMock.Verify(m => m.Add(It.Is<ChatGroup>(g => g.Name.Equals(name) && g.MaxUsers.Equals(maxUsers) && g.Visibility.Equals(visibility) && g.PasswordSalt.Equals(passwordSalt) && g.Password.Equals(passwordHashed) && g.ModeratorId.Equals(userId))), Times.Once);
+            groupRepositoryMock.Verify(m => m.Add(It.IsAny<ChatGroup>()), Times.Once);
         }
         [Fact]
         public void CorrectAddsModeratorToGroupUser()
         {
             //arrange
-            uint? groupId = 1;
+            int? groupId = 1;
             const string name = "abc";
             const int maxUsers = 5;
-            const ChatgroupVisibility visibility = ChatgroupVisibility.Private;
+            const ChatGroupVisibility visibility = ChatGroupVisibility.Private;
             const string password = "def";
             const string passwordSalt = "ghi";
             const string passwordHashed = "jkl";
-            const uint userId = 1;
+            const int userId = 1;
             userServiceMock.Setup(m => m.Exists(userId)).Returns(Task.FromResult(true));
-            groupRepositoryMock.Setup(m => m.Add(It.IsAny<Chatgroup>())).Returns(Task.FromResult(groupId));
+            groupRepositoryMock.Setup(m => m.Add(It.IsAny<ChatGroup>())).Returns(Task.FromResult(groupId));
             hashAndSaltServiceMock.Setup(m => m.GenerateSalt()).Returns(passwordSalt);
             hashAndSaltServiceMock.Setup(m => m.Hash(password, passwordSalt)).Returns(passwordHashed);
 
             //act
-            sut.Create(name, maxUsers, visibility, password, userId).Wait();
+            sut.Create(name, maxUsers, visibility, password, userId, groupUserServiceMock.Object).Wait();
 
             //assert
-            groupUserServiceMock.Verify(m => m.Add((uint)groupId, userId));
+            groupUserServiceMock.Verify(m => m.Add((int)groupId, userId));
+        }
+
+        [Fact]
+        public void CorrectChatGroupUserServiceNullAddsGroup()
+        {
+            //arrange
+            int? id = 1;
+            const string name = "abc";
+            const int maxUsers = 5;
+            const ChatGroupVisibility visibility = ChatGroupVisibility.Private;
+            const string password = "def";
+            const string passwordSalt = "ghi";
+            const string passwordHashed = "jkl";
+            const int userId = 1;
+            userServiceMock.Setup(m => m.Exists(userId)).Returns(Task.FromResult(true));
+            groupRepositoryMock.Setup(m => m.Add(It.IsAny<ChatGroup>())).Returns(Task.FromResult(id));
+            hashAndSaltServiceMock.Setup(m => m.GenerateSalt()).Returns(passwordSalt);
+            hashAndSaltServiceMock.Setup(m => m.Hash(password, passwordSalt)).Returns(passwordHashed);
+
+            //act
+            sut.Create(name, maxUsers, visibility, password, userId, null).Wait();
+
+            //assert
+            groupRepositoryMock.Verify(m => m.Add(It.Is<ChatGroup>(g => g.Name.Equals(name) && g.MaxUsers.Equals(maxUsers) && g.Visibility.Equals(visibility) && g.PasswordSalt.Equals(passwordSalt) && g.Password.Equals(passwordHashed) && g.ModeratorId.Equals(userId))), Times.Once);
+            groupRepositoryMock.Verify(m => m.Add(It.IsAny<ChatGroup>()), Times.Once);
         }
 
         [Fact]
         public void CorrectAddsGroupDefaultMaxUsers()
         {
             //arrange
-            uint? groupId = 1;
+            int? groupId = 1;
             const string name = "abc";
             const int maxUsers = 0;
-            const ChatgroupVisibility visibility = ChatgroupVisibility.Private;
+            const ChatGroupVisibility visibility = ChatGroupVisibility.Private;
             const string password = "def";
             const string passwordSalt = "ghi";
             const string passwordHashed = "jkl";
-            const uint userId = 1;
+            const int userId = 1;
             userServiceMock.Setup(m => m.Exists(userId)).Returns(Task.FromResult(true));
-            groupRepositoryMock.Setup(m => m.Add(It.IsAny<Chatgroup>())).Returns(Task.FromResult(groupId));
+            groupRepositoryMock.Setup(m => m.Add(It.IsAny<ChatGroup>())).Returns(Task.FromResult(groupId));
             hashAndSaltServiceMock.Setup(m => m.GenerateSalt()).Returns(passwordSalt);
             hashAndSaltServiceMock.Setup(m => m.Hash(password, passwordSalt)).Returns(passwordHashed);
 
             //act
-            sut.Create(name, visibility, password, userId).Wait();
+            sut.Create(name, visibility, password, userId, groupUserServiceMock.Object).Wait();
 
             //assert
-            groupRepositoryMock.Verify(m => m.Add(It.Is<Chatgroup>(g => g.Name.Equals(name) && g.MaxUsers.Equals(maxUsers) && g.Visibility.Equals(visibility) && g.PasswordSalt.Equals(passwordSalt) && g.Password.Equals(passwordHashed) && g.ModeratorId.Equals(userId))), Times.Once);
+            groupRepositoryMock.Verify(m => m.Add(It.Is<ChatGroup>(g => g.Name.Equals(name) && g.MaxUsers.Equals(maxUsers) && g.Visibility.Equals(visibility) && g.PasswordSalt.Equals(passwordSalt) && g.Password.Equals(passwordHashed) && g.ModeratorId.Equals(userId))), Times.Once);
         }
         [Fact]
         public void CorrectAddsGroupDefaultvisibility()
         {
             //arrange
-            uint? groupId = 1;
+            int? groupId = 1;
             const string name = "abc";
             const int maxUsers = 0;
-            const ChatgroupVisibility visibility = ChatgroupVisibility.Public;
-            const uint userId = 1;
-            groupRepositoryMock.Setup(m => m.Add(It.IsAny<Chatgroup>())).Returns(Task.FromResult(groupId));
+            const ChatGroupVisibility visibility = ChatGroupVisibility.Public;
+            const int userId = 1;
+            groupRepositoryMock.Setup(m => m.Add(It.IsAny<ChatGroup>())).Returns(Task.FromResult(groupId));
             userServiceMock.Setup(m => m.Exists(userId)).Returns(Task.FromResult(true));
 
             //act
-            sut.Create(name, maxUsers, userId).Wait();
+            sut.Create(name, maxUsers, userId, groupUserServiceMock.Object).Wait();
 
             //assert
-            groupRepositoryMock.Verify(m => m.Add(It.IsAny<Chatgroup>()), Times.Once);
-            groupRepositoryMock.Verify(m => m.Add(It.Is<Chatgroup>(g => g.Name.Equals(name) && g.MaxUsers.Equals(maxUsers) && g.Visibility.Equals(visibility) && g.PasswordSalt == null && g.Password == null && g.ModeratorId.Equals(userId))), Times.Once);
+            groupRepositoryMock.Verify(m => m.Add(It.IsAny<ChatGroup>()), Times.Once);
+            groupRepositoryMock.Verify(m => m.Add(It.Is<ChatGroup>(g => g.Name.Equals(name) && g.MaxUsers.Equals(maxUsers) && g.Visibility.Equals(visibility) && g.PasswordSalt == null && g.Password == null && g.ModeratorId.Equals(userId))), Times.Once);
         }
         [Fact]
         public void CorrectAddsGroupDefaultVisibilityAndMaxUsers()
         {
             //arrange
-            uint? groupId = 1;
+            int? groupId = 1;
             const string name = "abc";
             const int maxUsers = 0;
-            const ChatgroupVisibility visibility = ChatgroupVisibility.Public;
-            const uint userId = 1;
-            groupRepositoryMock.Setup(m => m.Add(It.IsAny<Chatgroup>())).Returns(Task.FromResult(groupId));
+            const ChatGroupVisibility visibility = ChatGroupVisibility.Public;
+            const int userId = 1;
+            groupRepositoryMock.Setup(m => m.Add(It.IsAny<ChatGroup>())).Returns(Task.FromResult(groupId));
             userServiceMock.Setup(m => m.Exists(userId)).Returns(Task.FromResult(true));
 
             //act
-            sut.Create(name, userId).Wait();
+            sut.Create(name, userId, groupUserServiceMock.Object).Wait();
 
             //assert
-            groupRepositoryMock.Verify(m => m.Add(It.Is<Chatgroup>(g => g.Name.Equals(name) && g.MaxUsers.Equals(maxUsers) && g.Visibility.Equals(visibility) && g.PasswordSalt==null && g.Password==null && g.ModeratorId.Equals(userId))), Times.Once);
+            groupRepositoryMock.Verify(m => m.Add(It.Is<ChatGroup>(g => g.Name.Equals(name) && g.MaxUsers.Equals(maxUsers) && g.Visibility.Equals(visibility) && g.PasswordSalt==null && g.Password==null && g.ModeratorId.Equals(userId))), Times.Once);
         }
 
         [Fact]
         public void CorrectReturnsTrue()
         {
             //arrange
-            uint? groupId = 1;
+            int? groupId = 1;
             const string name = "abc";
             const int maxUsers = 5;
-            const ChatgroupVisibility visibility = ChatgroupVisibility.Public;
+            const ChatGroupVisibility visibility = ChatGroupVisibility.Public;
             const string password = "def";
             const string passwordSalt = "ghi";
             const string passwordHashed = "jkl";
-            const uint userId = 1;
+            const int userId = 1;
             userServiceMock.Setup(m => m.Exists(userId)).Returns(Task.FromResult(true));
-            groupRepositoryMock.Setup(m => m.Add(It.IsAny<Chatgroup>())).Returns(Task.FromResult(groupId));
+            groupRepositoryMock.Setup(m => m.Add(It.IsAny<ChatGroup>())).Returns(Task.FromResult(groupId));
             hashAndSaltServiceMock.Setup(m => m.GenerateSalt()).Returns(passwordSalt);
             hashAndSaltServiceMock.Setup(m => m.Hash(password, passwordSalt)).Returns(passwordHashed);
 
             //act
-            bool result = sut.Create(name, maxUsers, visibility, password, userId).Result;
+            bool result = sut.Create(name, maxUsers, visibility, password, userId, groupUserServiceMock.Object).Result;
 
             //assert
             Assert.True(result);
@@ -149,44 +174,44 @@ namespace ITVitaeChat.ChatCoreTest.ChatgroupService
         public void UserDoesNotExistDoesNotAdd()
         {
             //arrange
-            uint? groupId = 1;
+            int? groupId = 1;
             const string name = "abc";
             const int maxUsers = 5;
-            const ChatgroupVisibility visibility = ChatgroupVisibility.Public;
+            const ChatGroupVisibility visibility = ChatGroupVisibility.Public;
             const string password = "def";
             const string passwordSalt = "ghi";
             const string passwordHashed = "jkl";
-            const uint userId = 1;
+            const int userId = 1;
             userServiceMock.Setup(m => m.Exists(userId)).Returns(Task.FromResult(false));
-            groupRepositoryMock.Setup(m => m.Add(It.IsAny<Chatgroup>())).Returns(Task.FromResult(groupId));
+            groupRepositoryMock.Setup(m => m.Add(It.IsAny<ChatGroup>())).Returns(Task.FromResult(groupId));
             hashAndSaltServiceMock.Setup(m => m.GenerateSalt()).Returns(passwordSalt);
             hashAndSaltServiceMock.Setup(m => m.Hash(password, passwordSalt)).Returns(passwordHashed);
 
             //act
-            sut.Create(name, maxUsers, visibility, password, userId).Wait();
+            sut.Create(name, maxUsers, visibility, password, userId, groupUserServiceMock.Object).Wait();
 
             //assert
-            groupRepositoryMock.Verify(m => m.Add(It.IsAny<Chatgroup>()), Times.Never);
+            groupRepositoryMock.Verify(m => m.Add(It.IsAny<ChatGroup>()), Times.Never);
         }
         [Fact]
         public void UserDoesNotExistReturnsFalse()
         {
             //arrange
-            uint? groupId = 1;
+            int? groupId = 1;
             const string name = "abc";
             const int maxUsers = 5;
-            const ChatgroupVisibility visibility = ChatgroupVisibility.Public;
+            const ChatGroupVisibility visibility = ChatGroupVisibility.Public;
             const string password = "def";
             const string passwordSalt = "ghi";
             const string passwordHashed = "jkl";
-            const uint userId = 1;
+            const int userId = 1;
             userServiceMock.Setup(m => m.Exists(userId)).Returns(Task.FromResult(false));
-            groupRepositoryMock.Setup(m => m.Add(It.IsAny<Chatgroup>())).Returns(Task.FromResult(groupId));
+            groupRepositoryMock.Setup(m => m.Add(It.IsAny<ChatGroup>())).Returns(Task.FromResult(groupId));
             hashAndSaltServiceMock.Setup(m => m.GenerateSalt()).Returns(passwordSalt);
             hashAndSaltServiceMock.Setup(m => m.Hash(password, passwordSalt)).Returns(passwordHashed);
 
             //act
-            bool result = sut.Create(name, maxUsers, visibility, password, userId).Result;
+            bool result = sut.Create(name, maxUsers, visibility, password, userId, groupUserServiceMock.Object).Result;
 
             //assert
             Assert.False(result);
@@ -196,54 +221,54 @@ namespace ITVitaeChat.ChatCoreTest.ChatgroupService
         public void VisibilityPublicPassesPasswordAsNull()
         {
             //arrange
-            uint? groupId = 1;
+            int? groupId = 1;
             const string name = "abc";
             const int maxUsers = 5;
-            const ChatgroupVisibility visibility = ChatgroupVisibility.Public;
+            const ChatGroupVisibility visibility = ChatGroupVisibility.Public;
             const string password = "def";
-            const uint userId = 1;
+            const int userId = 1;
             userServiceMock.Setup(m => m.Exists(userId)).Returns(Task.FromResult(true));
-            groupRepositoryMock.Setup(m => m.Add(It.IsAny<Chatgroup>())).Returns(Task.FromResult(groupId));
+            groupRepositoryMock.Setup(m => m.Add(It.IsAny<ChatGroup>())).Returns(Task.FromResult(groupId));
 
             //act
-            sut.Create(name, maxUsers, visibility, password, userId).Wait();
+            sut.Create(name, maxUsers, visibility, password, userId, groupUserServiceMock.Object).Wait();
 
             //assert
-            groupRepositoryMock.Verify(m => m.Add(It.Is<Chatgroup>(g => g.Name.Equals(name) && g.MaxUsers.Equals(maxUsers) && g.Visibility.Equals(visibility) && g.PasswordSalt==null && g.Password==null && g.ModeratorId.Equals(userId))), Times.Once);
+            groupRepositoryMock.Verify(m => m.Add(It.Is<ChatGroup>(g => g.Name.Equals(name) && g.MaxUsers.Equals(maxUsers) && g.Visibility.Equals(visibility) && g.PasswordSalt==null && g.Password==null && g.ModeratorId.Equals(userId))), Times.Once);
         }
 
         [Fact]
         public void VisibilityPublicPasswordNullPasses()
         {
             //arrange
-            uint? groupId = 1;
+            int? groupId = 1;
             const string name = "abc";
             const int maxUsers = 5;
-            const ChatgroupVisibility visibility = ChatgroupVisibility.Public;
-            const uint userId = 1;
+            const ChatGroupVisibility visibility = ChatGroupVisibility.Public;
+            const int userId = 1;
             userServiceMock.Setup(m => m.Exists(userId)).Returns(Task.FromResult(true));
-            groupRepositoryMock.Setup(m => m.Add(It.IsAny<Chatgroup>())).Returns(Task.FromResult(groupId));
+            groupRepositoryMock.Setup(m => m.Add(It.IsAny<ChatGroup>())).Returns(Task.FromResult(groupId));
 
             //act
-            sut.Create(name, maxUsers, visibility, null, userId).Wait();
+            sut.Create(name, maxUsers, visibility, null, userId, groupUserServiceMock.Object).Wait();
 
             //assert
-            groupRepositoryMock.Verify(m => m.Add(It.Is<Chatgroup>(g => g.Name.Equals(name) && g.MaxUsers.Equals(maxUsers) && g.Visibility.Equals(visibility) && g.PasswordSalt==null && g.Password==null && g.ModeratorId.Equals(userId))), Times.Once);
+            groupRepositoryMock.Verify(m => m.Add(It.Is<ChatGroup>(g => g.Name.Equals(name) && g.MaxUsers.Equals(maxUsers) && g.Visibility.Equals(visibility) && g.PasswordSalt==null && g.Password==null && g.ModeratorId.Equals(userId))), Times.Once);
         }
         [Fact]
         public void VisibilityPublicPasswordNullReturnsTrue()
         {
             //arrange
-            uint? groupId = 1;
+            int? groupId = 1;
             const string name = "abc";
             const int maxUsers = 5;
-            const ChatgroupVisibility visibility = ChatgroupVisibility.Public;
-            const uint userId = 1;
+            const ChatGroupVisibility visibility = ChatGroupVisibility.Public;
+            const int userId = 1;
             userServiceMock.Setup(m => m.Exists(userId)).Returns(Task.FromResult(true));
-            groupRepositoryMock.Setup(m => m.Add(It.IsAny<Chatgroup>())).Returns(Task.FromResult(groupId));
+            groupRepositoryMock.Setup(m => m.Add(It.IsAny<ChatGroup>())).Returns(Task.FromResult(groupId));
 
             //act
-            bool result = sut.Create(name, maxUsers, visibility, null, userId).Result;
+            bool result = sut.Create(name, maxUsers, visibility, null, userId, groupUserServiceMock.Object).Result;
 
             //assert
             Assert.True(result);
@@ -257,23 +282,23 @@ namespace ITVitaeChat.ChatCoreTest.ChatgroupService
         public void NameEmptyOrNullDoesNotPass(string name)
         {
             //arrange
-            uint? groupId = 1;
+            int? groupId = 1;
             const int maxUsers = 5;
-            const ChatgroupVisibility visibility = ChatgroupVisibility.Private;
+            const ChatGroupVisibility visibility = ChatGroupVisibility.Private;
             const string password = "def";
             const string passwordSalt = "ghi";
             const string passwordHashed = "jkl";
-            const uint userId = 1;
+            const int userId = 1;
             userServiceMock.Setup(m => m.Exists(userId)).Returns(Task.FromResult(true));
-            groupRepositoryMock.Setup(m => m.Add(It.IsAny<Chatgroup>())).Returns(Task.FromResult(groupId));
+            groupRepositoryMock.Setup(m => m.Add(It.IsAny<ChatGroup>())).Returns(Task.FromResult(groupId));
             hashAndSaltServiceMock.Setup(m => m.GenerateSalt()).Returns(passwordSalt);
             hashAndSaltServiceMock.Setup(m => m.Hash(password, passwordSalt)).Returns(passwordHashed);
 
             //act
-            sut.Create(name, maxUsers, visibility, password, userId).Wait();
+            sut.Create(name, maxUsers, visibility, password, userId, groupUserServiceMock.Object).Wait();
 
             //assert
-            groupRepositoryMock.Verify(m => m.Add(It.IsAny<Chatgroup>()), Times.Never);
+            groupRepositoryMock.Verify(m => m.Add(It.IsAny<ChatGroup>()), Times.Never);
         }
         [Theory]
         [InlineData(null)]
@@ -283,20 +308,20 @@ namespace ITVitaeChat.ChatCoreTest.ChatgroupService
         public void NameEmptyOrNullReturnsFalse(string name)
         {
             //arrange
-            uint? groupId = 1;
+            int? groupId = 1;
             const int maxUsers = 5;
-            const ChatgroupVisibility visibility = ChatgroupVisibility.Private;
+            const ChatGroupVisibility visibility = ChatGroupVisibility.Private;
             const string password = "def";
             const string passwordSalt = "ghi";
             const string passwordHashed = "jkl";
-            const uint userId = 1;
+            const int userId = 1;
             userServiceMock.Setup(m => m.Exists(userId)).Returns(Task.FromResult(true));
-            groupRepositoryMock.Setup(m => m.Add(It.IsAny<Chatgroup>())).Returns(Task.FromResult(groupId));
+            groupRepositoryMock.Setup(m => m.Add(It.IsAny<ChatGroup>())).Returns(Task.FromResult(groupId));
             hashAndSaltServiceMock.Setup(m => m.GenerateSalt()).Returns(passwordSalt);
             hashAndSaltServiceMock.Setup(m => m.Hash(password, passwordSalt)).Returns(passwordHashed);
 
             //act
-            bool result = sut.Create(name, maxUsers, visibility, password, userId).Result;
+            bool result = sut.Create(name, maxUsers, visibility, password, userId, groupUserServiceMock.Object).Result;
 
             //assert
             Assert.False(result);
@@ -310,23 +335,23 @@ namespace ITVitaeChat.ChatCoreTest.ChatgroupService
         public void VisibilityPrivatePasswordEmptyOrNullDoesNotPass(string password)
         {
             //arrange
-            uint? groupId = 1;
+            int? groupId = 1;
             const string name = "abc";
             const int maxUsers = 5;
-            const ChatgroupVisibility visibility = ChatgroupVisibility.Private;
+            const ChatGroupVisibility visibility = ChatGroupVisibility.Private;
             const string passwordSalt = "ghi";
             const string passwordHashed = "jkl";
-            const uint userId = 1;
+            const int userId = 1;
             userServiceMock.Setup(m => m.Exists(userId)).Returns(Task.FromResult(true));
-            groupRepositoryMock.Setup(m => m.Add(It.IsAny<Chatgroup>())).Returns(Task.FromResult(groupId));
+            groupRepositoryMock.Setup(m => m.Add(It.IsAny<ChatGroup>())).Returns(Task.FromResult(groupId));
             hashAndSaltServiceMock.Setup(m => m.GenerateSalt()).Returns(passwordSalt);
             hashAndSaltServiceMock.Setup(m => m.Hash(password, passwordSalt)).Returns(passwordHashed);
 
             //act
-            sut.Create(name, maxUsers, visibility, password, userId).Wait();
+            sut.Create(name, maxUsers, visibility, password, userId, groupUserServiceMock.Object).Wait();
 
             //assert
-            groupRepositoryMock.Verify(m => m.Add(It.IsAny<Chatgroup>()), Times.Never);
+            groupRepositoryMock.Verify(m => m.Add(It.IsAny<ChatGroup>()), Times.Never);
         }
         [Theory]
         [InlineData(null)]
@@ -336,20 +361,20 @@ namespace ITVitaeChat.ChatCoreTest.ChatgroupService
         public void VisibilityPrivatePasswordEmptyOrNullReturnsFalse(string password)
         {
             //arrange
-            uint? groupId = 1;
+            int? groupId = 1;
             const string name = "abc";
             const int maxUsers = 5;
-            const ChatgroupVisibility visibility = ChatgroupVisibility.Private;
+            const ChatGroupVisibility visibility = ChatGroupVisibility.Private;
             const string passwordSalt = "ghi";
             const string passwordHashed = "jkl";
-            const uint userId = 1;
+            const int userId = 1;
             userServiceMock.Setup(m => m.Exists(userId)).Returns(Task.FromResult(true));
-            groupRepositoryMock.Setup(m => m.Add(It.IsAny<Chatgroup>())).Returns(Task.FromResult(groupId));
+            groupRepositoryMock.Setup(m => m.Add(It.IsAny<ChatGroup>())).Returns(Task.FromResult(groupId));
             hashAndSaltServiceMock.Setup(m => m.GenerateSalt()).Returns(passwordSalt);
             hashAndSaltServiceMock.Setup(m => m.Hash(password, passwordSalt)).Returns(passwordHashed);
 
             //act
-            bool result = sut.Create(name, maxUsers, visibility, password, userId).Result;
+            bool result = sut.Create(name, maxUsers, visibility, password, userId, groupUserServiceMock.Object).Result;
 
             //assert
             Assert.False(result);

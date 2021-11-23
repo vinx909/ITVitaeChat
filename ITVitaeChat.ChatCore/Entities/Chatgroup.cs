@@ -7,15 +7,15 @@ using ITVitaeChat.ChatCore.Enums;
 
 namespace ITVitaeChat.ChatCore.Entities
 {
-    public class Chatgroup
+    public class ChatGroup
     {
-        public uint Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public int MaxUsers { get; set; }
-        public ChatgroupVisibility Visibility { get; set; }
+        public ChatGroupVisibility Visibility { get; set; }
         public string PasswordSalt { get; set; }
         public string Password { get; set; }
-        public uint ModeratorId { get; set; }
+        public int ModeratorId { get; set; }
         public User Moderator { get; set; }
         public bool OneToOne { get; set; }
     }

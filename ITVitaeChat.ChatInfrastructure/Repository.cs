@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using ITVitaeChat.ChatCore.Interfaces;
@@ -21,13 +22,13 @@ namespace ITVitaeChat.ChatInfrastructure
             this.dbContext = dbContext;
         }
 
-        public async Task<uint?> Add(T value)
+        public async Task<int?> Add(T value)
         {
             dbContext.Add(value);
             await dbContext.SaveChangesAsync();
             if(typeof(T).GetProperty(proppertyNameId) != null)
             {
-                return (uint) typeof(T).GetProperty(proppertyNameId).GetValue(value);
+                return (int) typeof(T).GetProperty(proppertyNameId).GetValue(value);
             }
             else
             {
@@ -47,7 +48,7 @@ namespace ITVitaeChat.ChatInfrastructure
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task<bool> Contains(uint id)
+        public async Task<bool> Contains(int id)
         {
             if (typeof(T).GetProperty(proppertyNameId) != null)
             {
@@ -63,7 +64,7 @@ namespace ITVitaeChat.ChatInfrastructure
             return await dbContext.Set<T>().AnyAsync(query);
         }
 
-        public async Task<T> Get(uint id)
+        public async Task<T> Get(int id)
         {
             return await dbContext.Set<T>().FindAsync(id);
         }
@@ -76,6 +77,11 @@ namespace ITVitaeChat.ChatInfrastructure
         public async Task<IEnumerable<T>> GetAll()
         {
             return await dbContext.Set<T>().ToArrayAsync();
+        }
+
+        public async Task<IEnumerable<T>> GetAll(Expression<Func<T, bool>> query)
+        {
+            return await dbContext.Set<T>().Where(query).ToArrayAsync();
         }
     }
 }

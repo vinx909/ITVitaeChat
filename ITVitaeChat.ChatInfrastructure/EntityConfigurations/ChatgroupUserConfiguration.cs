@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ITVitaeChat.ChatInfrastructure.EntityConfigurations
 {
-    class ChatgroupUserConfiguration : IEntityTypeConfiguration<ChatgroupUser>
+    class ChatgroupUserConfiguration : IEntityTypeConfiguration<ChatGroupUser>
     {
         private const string chatgroupUserTableName = "ChatgroupUsers";
 
-        public void Configure(EntityTypeBuilder<ChatgroupUser> builder)
+        public void Configure(EntityTypeBuilder<ChatGroupUser> builder)
         {
             builder.ToTable(chatgroupUserTableName);
             builder.HasOne(c => c.User).WithMany().HasForeignKey(c => c.UserId);

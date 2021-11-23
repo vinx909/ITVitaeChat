@@ -12,18 +12,18 @@ namespace ITVitaeChat.ChatCore.Services
     {
         private const int amountPerPage = 10;
 
-        private IChatMessageRepository messageRepository;
-        private IChatDisallowedWordsService disallowedWordsService;
-        private IChatgroupUserService chatgroupUserService;
+        private readonly IChatMessageRepository messageRepository;
+        private readonly IChatDisallowedWordsService disallowedWordsService;
+        private readonly IChatGroupUserService chatgroupUserService;
 
-        public ChatMessageService(IChatMessageRepository messageRepository, IChatDisallowedWordsService disallowedWordsService, IChatgroupUserService chatgroupUserService)
+        public ChatMessageService(IChatMessageRepository messageRepository, IChatDisallowedWordsService disallowedWordsService, IChatGroupUserService chatgroupUserService)
         {
             this.messageRepository = messageRepository;
             this.disallowedWordsService = disallowedWordsService;
             this.chatgroupUserService = chatgroupUserService;
         }
 
-        public async Task<bool> Add(string content, uint senderId, uint groupId)
+        public async Task<bool> Add(string content, int senderId, int groupId)
         {
             if (await chatgroupUserService.Exists(groupId, senderId))
             {
@@ -45,7 +45,7 @@ namespace ITVitaeChat.ChatCore.Services
             }
         }
 
-        public async Task<IEnumerable<ChatMessage>> Get(uint groupId, int page)
+        public async Task<IEnumerable<ChatMessage>> Get(int groupId, int page)
         {
             return await messageRepository.GetPage(groupId, amountPerPage, page);
         }

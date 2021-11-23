@@ -10,6 +10,6 @@ namespace ITVitaeChat.ChatCore.Interfaces
     public interface IAdministratorService
     {
         public Task<bool> Add(Administrator administrator);
-        public Task<Administrator> Get(uint Id);
+        public Task<Administrator> Get(int Id);
     }
 }

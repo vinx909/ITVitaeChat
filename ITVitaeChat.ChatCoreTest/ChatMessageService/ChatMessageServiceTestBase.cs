@@ -14,7 +14,7 @@ namespace ITVitaeChat.ChatCoreTest.ChatMessageService
         protected readonly IChatMessageService sut;
         protected readonly Mock<IChatMessageRepository> messageRepositoryMock;
         protected readonly Mock<IChatDisallowedWordsService> disallowedWordsServiceMock;
-        protected readonly Mock<IChatgroupUserService> groupUserServiceMock;
+        protected readonly Mock<IChatGroupUserService> groupUserServiceMock;
 
         public ChatMessageServiceTestBase()
         {

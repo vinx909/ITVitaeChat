@@ -10,15 +10,15 @@ using Xunit;
 
 namespace ITVitaeChat.ChatCoreTest.ChatgroupUserService
 {
-    public class Exists : ChatgroupUserServiceTestBase
+    public class Exists : ChatGroupUserServiceTestBase
     {
         [Fact]
         public void IfExistsReturnsTrue()
         {
             //arrange
-            const uint groupId = 2;
-            const uint userId = 1;
-            groupUserRepositoryMock.Setup(m => m.Contains(It.IsAny<Expression<Func<ChatgroupUser, bool>>>())).Returns(Task.FromResult(true));
+            const int groupId = 2;
+            const int userId = 1;
+            groupUserRepositoryMock.Setup(m => m.Contains(It.IsAny<Expression<Func<ChatGroupUser, bool>>>())).Returns(Task.FromResult(true));
 
             //act
             bool result = sut.Exists(groupId, userId).Result;
@@ -31,9 +31,9 @@ namespace ITVitaeChat.ChatCoreTest.ChatgroupUserService
         public void IfDoesNotExistsReturnsFalse()
         {
             //arrange
-            const uint groupId = 2;
-            const uint userId = 1;
-            groupUserRepositoryMock.Setup(m => m.Contains(It.IsAny<Expression<Func<ChatgroupUser, bool>>>())).Returns(Task.FromResult(false));
+            const int groupId = 2;
+            const int userId = 1;
+            groupUserRepositoryMock.Setup(m => m.Contains(It.IsAny<Expression<Func<ChatGroupUser, bool>>>())).Returns(Task.FromResult(false));
 
             //act
             bool result = sut.Exists(groupId, userId).Result;

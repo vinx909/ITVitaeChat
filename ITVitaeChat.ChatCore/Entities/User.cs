@@ -8,8 +8,8 @@ namespace ITVitaeChat.ChatCore.Entities
 {
     public class User
     {
-        public uint Id { get; set; }
-        public uint IdentityId { get; set; }
+        public int Id { get; set; }
+        public int IdentityId { get; set; }
         public string Name { get; set; }
         public string DisplayName { get; set; }
         public string Emailadres { get; set; }

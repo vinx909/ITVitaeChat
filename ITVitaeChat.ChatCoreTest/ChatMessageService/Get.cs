@@ -46,12 +46,12 @@ namespace ITVitaeChat.ChatCoreTest.ChatMessageService
             Assert.Equal(messages, result);
         }
 
-        private IEnumerable<ChatMessage> CreateMessages(int amount, uint chatgroup)
+        private IEnumerable<ChatMessage> CreateMessages(int amount, int chatgroup)
         {
             List<ChatMessage> messages = new();
             for (int i = 0; i < amount; i++)
             {
-                messages.Add(new() { ChatgroupId = chatgroup, UserId = (uint)i % 3, SendTime = DateTime.Now.AddMinutes(-i), Content = "test message nr" + i, Id = (uint)i });
+                messages.Add(new() { ChatgroupId = chatgroup, UserId = (int)i % 3, SendTime = DateTime.Now.AddMinutes(-i), Content = "test message nr" + i, Id = (int)i });
             }
             return messages;
         }

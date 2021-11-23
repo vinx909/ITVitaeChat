@@ -13,33 +13,31 @@ namespace ITVitaeChat.ChatCore.Services
     {
         private const string exceptionNoGroupIdRecoveredMessage = "after the addition of group {0} the repository failed to return to return an id (at least origionaly done with reflection in a generic repository and could be solved with a entity specific repository)";
         private const int defaultMaxUser = 0;
-        private const ChatgroupVisibility defaultVisibility = ChatgroupVisibility.Public;
+        private const ChatGroupVisibility defaultVisibility = ChatGroupVisibility.Public;
 
-        private readonly IRepository<Chatgroup> chatgroupRepository;
-        private readonly IChatgroupUserService chatgroupUserService;
+        private readonly IRepository<ChatGroup> chatgroupRepository;
         private readonly IHashAndSaltService hashAndSaltService;
         private readonly IUserService userService;
 
-        public ChatGroupService(IRepository<Chatgroup> chatgroupRepository, IChatgroupUserService chatgroupUserService, IHashAndSaltService hashAndSaltService, IUserService userService)
+        public ChatGroupService(IRepository<ChatGroup> chatgroupRepository, IHashAndSaltService hashAndSaltService, IUserService userService)
         {
             this.chatgroupRepository = chatgroupRepository;
-            this.chatgroupUserService = chatgroupUserService;
             this.hashAndSaltService = hashAndSaltService;
             this.userService = userService;
         }
 
-        public async Task<bool> Create(string name, int maxUser, ChatgroupVisibility visibility, string password, uint userId)
+        public async Task<bool> Create(string name, int maxUser, ChatGroupVisibility visibility, string password, int userId, IChatGroupUserService chatgroupUserService)
         {
             if (await userService.Exists(userId) && !string.IsNullOrWhiteSpace(name))
             {
-                Chatgroup group = new() { Name = name, MaxUsers = maxUser, ModeratorId = userId };
-                if(visibility == ChatgroupVisibility.Public)
+                ChatGroup group = new() { Name = name, MaxUsers = maxUser, ModeratorId = userId };
+                if(visibility == ChatGroupVisibility.Public)
                 {
                     group.Visibility = visibility;
                     group.PasswordSalt = null;
                     group.Password = null;
                 }
-                else if(visibility == ChatgroupVisibility.Private)
+                else if(visibility == ChatGroupVisibility.Private)
                 {
                     if (!string.IsNullOrWhiteSpace(password))
                     {
@@ -52,12 +50,15 @@ namespace ITVitaeChat.ChatCore.Services
                         return false;
                     }
                 }
-                uint? groupId = await chatgroupRepository.Add(group);
+                int? groupId = await chatgroupRepository.Add(group);
                 if(groupId == null)
                 {
                     throw new Exception(string.Format(exceptionNoGroupIdRecoveredMessage, name));
                 }
-                chatgroupUserService.Add((uint)groupId, userId);
+                if(chatgroupUserService != null)
+                {
+                    await chatgroupUserService.Add((int)groupId, userId);
+                }
                 return true;
             }
             else
@@ -66,24 +67,45 @@ namespace ITVitaeChat.ChatCore.Services
             }
         }
         
-        public async Task<bool> Create(string name, ChatgroupVisibility visibility, string password, uint userId)
+        public async Task<bool> Create(string name, ChatGroupVisibility visibility, string password, int userId, IChatGroupUserService chatgroupUserService)
         {
-            return await Create(name, defaultMaxUser, visibility, password, userId);
+            return await Create(name, defaultMaxUser, visibility, password, userId, chatgroupUserService);
         }
         
-        public async Task<bool> Create(string name, int maxUser, uint userId)
+        public async Task<bool> Create(string name, int maxUser, int userId, IChatGroupUserService chatgroupUserService)
         {
-            return await Create(name, maxUser, defaultVisibility, null, userId);
+            return await Create(name, maxUser, defaultVisibility, null, userId, chatgroupUserService);
         }
 
-        public async Task<bool> Create(string name, uint userId)
+        public async Task<bool> Create(string name, int userId, IChatGroupUserService chatgroupUserService)
         {
-            return await Create(name, defaultMaxUser, defaultVisibility, null, userId);
+            return await Create(name, defaultMaxUser, defaultVisibility, null, userId, chatgroupUserService);
         }
 
-        public Task<bool> Exist(uint groupId)
+        public async Task<bool> Exists(int groupId)
         {
-            throw new NotImplementedException();
+            return await chatgroupRepository.Contains(groupId);
+        }
+
+        public async Task<bool> Remove(int groupId, IChatGroupUserService groupUserService = null)
+        {
+            ChatGroup group = await chatgroupRepository.Get(groupId);
+            if(group == null)
+            {
+                return false;
+            }
+            if(groupUserService != null)
+            {
+                IEnumerable<int> userIds = await groupUserService.GetGroupUsers(groupId);
+                List<Task> tasks = new();
+                foreach (int userId in userIds)
+                {
+                    tasks.Add(groupUserService.Remove(groupId, userId));
+                }
+                Task.WaitAll(tasks.ToArray());
+            }
+            await chatgroupRepository.Delete(group);
+            return true;
         }
     }
 }

@@ -15,7 +15,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         public void ValuesCorrectCallsEdit()
         {
             //arrange
-            const uint id= 1;
+            const int id = 1;
             User repositoryUser = new() { Id = id, Name = "a", DisplayName = "b", Emailadres = "c@d.ef", Password = "g", PasswordSalt = "h", Validated = true, Blocked = false };
             userRepositoryMock.Setup(m => m.Get(id)).Returns(Task.FromResult(repositoryUser));
 
@@ -29,7 +29,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         public void UserCorrectCallsEdit()
         {
             //arrange
-            const uint id = 1;
+            const int id = 1;
             User repositoryUser = new() { Id = id, Name = "a", DisplayName = "b", Emailadres = "c@d.ef", Password = "g", PasswordSalt = "h", Validated = true, Blocked = false };
             User user = new() { Id = id, Name = "a", DisplayName = "def", Emailadres = "ghi@jkl.mno", Password = "pqr", PasswordSalt = "h", Validated = true, Blocked = false };
             userRepositoryMock.Setup(m => m.Get(id)).Returns(Task.FromResult(repositoryUser));
@@ -45,7 +45,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         public void UserWithoutUnnessisaryValuesCorrectCallsEdit()
         {
             //arrange
-            const uint id = 1;
+            const int id = 1;
             User repositoryUser = new() { Id = id, Name = "a", DisplayName = "b", Emailadres = "c@d.ef", Password = "g", PasswordSalt = "h", Validated = true, Blocked = false };
             User user = new() { Id = id, DisplayName = "def", Emailadres = "ghi@jkl.mno", Password = "pqr"};
             userRepositoryMock.Setup(m => m.Get(id)).Returns(Task.FromResult(repositoryUser));
@@ -60,7 +60,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         public void ValueCorrectReturnsTrue()
         {
             //arrange
-            const uint id = 1;
+            const int id = 1;
             User repositoryUser = new() { Id = id, Name = "a", DisplayName = "b", Emailadres = "c@d.ef", Password = "g", PasswordSalt = "h", Validated = true, Blocked = false };
             userRepositoryMock.Setup(m => m.Get(id)).Returns(Task.FromResult(repositoryUser));
 
@@ -74,7 +74,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         public void UserCorrectReturnsTrue()
         {
             //arrange
-            const uint id = 1;
+            const int id = 1;
             User repositoryUser = new() { Id = id, Name = "a", DisplayName = "b", Emailadres = "c@d.ef", Password = "g", PasswordSalt = "h", Validated = true, Blocked = false };
             User user = new() { Id = id, DisplayName = "def", Emailadres = "ghi@jkl.mno", Password = "pqr"};
             userRepositoryMock.Setup(m => m.Get(id)).Returns(Task.FromResult(repositoryUser));
@@ -90,7 +90,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         public void UserWithoutUnnessisaryValuesCorrectReturnsTrue()
         {
             //arrange
-            const uint id = 1;
+            const int id = 1;
             User repositoryUser = new() { Id = id, Name = "a", DisplayName = "b", Emailadres = "c@d.ef", Password = "g", PasswordSalt = "h", Validated = true, Blocked = false };
             User user = new() { Id = id, DisplayName = "def", Emailadres = "ghi@jkl.mno", Password = "pqr" };
             userRepositoryMock.Setup(m => m.Get(id)).Returns(Task.FromResult(repositoryUser));
@@ -112,7 +112,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         public void ValuesCorrectWithNullValuesCallsEdit(string displayName, string password, string emailadress)
         {
             //arrange
-            const uint id = 1;
+            const int id = 1;
             User repositoryUser = new() { Id = id, Name = "a", DisplayName = "b", Emailadres = "c@d.ef", Password = "g", PasswordSalt = "h", Validated = true, Blocked = false };
             userRepositoryMock.Setup(m => m.Get(id)).Returns(Task.FromResult(repositoryUser));
 
@@ -132,7 +132,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         public void UserCorrectWithNullValuesCallsEdit(string displayName, string password, string emailadress)
         {
             //arrange
-            const uint id = 1;
+            const int id = 1;
             User repositoryUser = new() { Id = id, Name = "a", DisplayName = "b", Emailadres = "c@d.ef", Password = "g", PasswordSalt = "h", Validated = true, Blocked = false };
             User user = new() { Id = id, DisplayName = displayName, Password = password, Emailadres = emailadress };
             userRepositoryMock.Setup(m => m.Get(id)).Returns(Task.FromResult(repositoryUser));
@@ -153,7 +153,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         public void ValuesCorrectWithNullValuesReturnsTrue(string displayName, string password, string emailadress)
         {
             //arrange
-            const uint id = 1;
+            const int id = 1;
             User repositoryUser = new() { Id = id, Name = "a", DisplayName = "b", Emailadres = "c@d.ef", Password = "g", PasswordSalt = "h", Validated = true, Blocked = false };
             userRepositoryMock.Setup(m => m.Get(id)).Returns(Task.FromResult(repositoryUser));
 
@@ -173,7 +173,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         public void UserCorrectWithNullValuesReturnsTrue(string displayName, string password, string emailadress)
         {
             //arrange
-            const uint id = 1;
+            const int id = 1;
             User repositoryUser = new() { Id = id, Name = "a", DisplayName = "b", Emailadres = "c@d.ef", Password = "g", PasswordSalt = "h", Validated = true, Blocked = false };
             User user = new() { Id = id, DisplayName = displayName, Password = password, Emailadres = emailadress };
             userRepositoryMock.Setup(m => m.Get(id)).Returns(Task.FromResult(repositoryUser));
@@ -194,7 +194,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         public void ValuesCorrectWithNullValuesDoesNotChangeValuesThatAreNull(string displayName, string password, string emailadress)
         {
             //arrange
-            const uint id = 1;
+            const int id = 1;
             const string oldDisplayName = "b";
             const string oldEmailadres = "c@d.ef";
             const string oldPassword = "g";
@@ -236,7 +236,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         public void UserCorrectWithNullValuesDoesNotChangeValuesThatAreNull(string displayName, string password, string emailadress)
         {
             //arrange
-            const uint id = 1;
+            const int id = 1;
             const string oldDisplayName = "b";
             const string oldEmailadres = "c@d.ef";
             const string oldPassword = "g";
@@ -274,7 +274,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         public void ValuesAllNullDoesNotEdit()
         {
             //arrange
-            const uint id = 1;
+            const int id = 1;
             User repositoryUser = new() { Id = id, Name = "a", DisplayName = "b", Emailadres = "c@d.ef", Password = "g", PasswordSalt = "h", Validated = true, Blocked = false };
             userRepositoryMock.Setup(m => m.Get(id)).Returns(Task.FromResult(repositoryUser));
 
@@ -288,7 +288,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         public void UserAllNullDoesNotEdit()
         {
             //arrange
-            const uint id = 1;
+            const int id = 1;
             User repositoryUser = new() { Id = id, Name = "a", DisplayName = "b", Emailadres = "c@d.ef", Password = "g", PasswordSalt = "h", Validated = true, Blocked = false };
             User user = new() { Id = id, DisplayName = null, Emailadres = null, Password = null };
             userRepositoryMock.Setup(m => m.Get(id)).Returns(Task.FromResult(repositoryUser));
@@ -303,7 +303,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         public void ValuesAllNullReturnsFalse()
         {
             //arrange
-            const uint id = 1;
+            const int id = 1;
             User repositoryUser = new() { Id = id, Name = "a", DisplayName = "b", Emailadres = "c@d.ef", Password = "g", PasswordSalt = "h", Validated = true, Blocked = false };
             userRepositoryMock.Setup(m => m.Get(id)).Returns(Task.FromResult(repositoryUser));
 
@@ -317,7 +317,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         public void UserAllNullReturnsFalse()
         {
             //arrange
-            const uint id = 1;
+            const int id = 1;
             User repositoryUser = new() { Id = id, Name = "a", DisplayName = "b", Emailadres = "c@d.ef", Password = "g", PasswordSalt = "h", Validated = true, Blocked = false };
             User user = new() { Id = id, DisplayName = null, Emailadres = null, Password = null };
             userRepositoryMock.Setup(m => m.Get(id)).Returns(Task.FromResult(repositoryUser));
@@ -333,7 +333,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         public void ValuesCorrectChangesDisplayName()
         {
             //arrange
-            const uint id = 1;
+            const int id = 1;
             const string newDisplayName = "def";
             User repositoryUser = new() { Id = id, Name = "a", DisplayName = "b", Emailadres = "c@d.ef", Password = "g", PasswordSalt = "h", Validated = true, Blocked = false };
             userRepositoryMock.Setup(m => m.Get(id)).Returns(Task.FromResult(repositoryUser));
@@ -348,7 +348,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         public void UserCorrectChangesDisplayName()
         {
             //arrange
-            const uint id = 1;
+            const int id = 1;
             const string newDisplayName = "def";
             const string emailadress = "c@d.ef";
             User repositoryUser = new() { Id = id, Name = "a", DisplayName = "b", Emailadres = emailadress, Password = "g", PasswordSalt = "h", Validated = true, Blocked = false };
@@ -365,7 +365,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         public void ValuesCorrectChangesEmailadress()
         {
             //arrange
-            const uint id = 1;
+            const int id = 1;
             const string newEmailadress = "def@ghi.jkl";
             User repositoryUser = new() { Id = id, Name = "a", DisplayName = "b", Emailadres = "c@d.ef", Password = "g", PasswordSalt = "h", Validated = true, Blocked = false };
             userRepositoryMock.Setup(m => m.Get(id)).Returns(Task.FromResult(repositoryUser));
@@ -380,7 +380,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         public void UserCorrectChangesEmailadress()
         {
             //arrange
-            const uint id = 1;
+            const int id = 1;
             const string newEmailadress = "def@ghi.jkl";
             User repositoryUser = new() { Id = id, Name = "a", DisplayName = "b", Emailadres = "c@d.ef", Password = "g", PasswordSalt = "h", Validated = true, Blocked = false };
             User user = new() { Id = id, Emailadres = newEmailadress };
@@ -398,7 +398,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         public void ValueNoReturnOnIdReturnsFalse()
         {
             //arrange
-            const uint id = 1;
+            const int id = 1;
             userRepositoryMock.Setup(m => m.Get(id)).Returns(Task.FromResult<User>(null));
 
             //act
@@ -411,7 +411,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         public void UserNoReturnOnIdReturnsFalse()
         {
             //arrange
-            const uint id = 1;
+            const int id = 1;
             User user = new() { Id = id, DisplayName = "def", Emailadres = "ghi@jkl.mno", Password = "pqr" };
             userRepositoryMock.Setup(m => m.Get(id)).Returns(Task.FromResult<User>(null));
 
@@ -435,7 +435,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         public void ValueIncompleteDataDoesNotEdit(string username, string emailadress, string password)
         {
             //arrange
-            const uint id = 1;
+            const int id = 1;
             User repositoryUser = new() { Id = id, Name = "a", DisplayName = "b", Emailadres = "c@d.ef", Password = "g", PasswordSalt = "h", Validated = true, Blocked = false };
             userRepositoryMock.Setup(m => m.Get(id)).Returns(Task.FromResult(repositoryUser));
 
@@ -458,7 +458,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         public void UserIncompleteDataDoesNotEdit(string username, string emailadress, string password)
         {
             //arrange
-            const uint id = 1;
+            const int id = 1;
             User repositoryUser = new() { Id = id, Name = "a", DisplayName = "b", Emailadres = "c@d.ef", Password = "g", PasswordSalt = "h", Validated = true, Blocked = false };
             User user = new() { Id = id, DisplayName = username, Emailadres = emailadress, Password = password};
             userRepositoryMock.Setup(m => m.Get(id)).Returns(Task.FromResult(repositoryUser));
@@ -482,7 +482,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         public void ValueIncompleteDataReturnsFalse(string username, string emailadress, string password)
         {
             //arrange
-            const uint id = 1;
+            const int id = 1;
             User repositoryUser = new() { Id = id, Name = "a", DisplayName = "b", Emailadres = "c@d.ef", Password = "g", PasswordSalt = "h", Validated = true, Blocked = false };
             userRepositoryMock.Setup(m => m.Get(id)).Returns(Task.FromResult(repositoryUser));
 
@@ -505,7 +505,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         public void UserIncompleteDataReturnsFalse(string username, string emailadress, string password)
         {
             //arrange
-            const uint id = 1;
+            const int id = 1;
             User repositoryUser = new() { Id = id, Name = "a", DisplayName = "b", Emailadres = "c@d.ef", Password = "g", PasswordSalt = "h", Validated = true, Blocked = false };
             User user = new() { Id = id, DisplayName = username, Emailadres = emailadress, Password = password};
             userRepositoryMock.Setup(m => m.Get(id)).Returns(Task.FromResult(repositoryUser));
@@ -531,7 +531,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         public void ValueIncorrectEmailadressDoesNotEdit(string emailadres)
         {
             //arrange
-            const uint id = 1;
+            const int id = 1;
             const string displayname = "b";
             const string password = "g";
             User repositoryUser = new() { Id = id, Name = "a", DisplayName = displayname, Emailadres = "c@d.ef", Password = password, PasswordSalt = "h", Validated = true, Blocked = false };
@@ -557,7 +557,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         public void UserIncorrectEmailadressDoesNotEdit(string emailadres)
         {
             //arrange
-            const uint id = 1;
+            const int id = 1;
             const string displayname = "b";
             const string password = "g";
             User repositoryUser = new() { Id = id, Name = "a", DisplayName = displayname, Emailadres = "c@d.ef", Password = password, PasswordSalt = "h", Validated = true, Blocked = false };
@@ -584,7 +584,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         public void ValueIncorrectEmailadressReturnFalse(string emailadres)
         {
             //arrange
-            const uint id = 1;
+            const int id = 1;
             const string displayname = "b";
             const string password = "g";
             User repositoryUser = new() { Id = id, Name = "a", DisplayName = displayname, Emailadres = "c@d.ef", Password = password, PasswordSalt = "h", Validated = true, Blocked = false };
@@ -610,7 +610,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         public void UserIncorrectEmailadressReturnsFalse(string emailadres)
         {
             //arrange
-            const uint id = 1;
+            const int id = 1;
             const string displayname = "b";
             const string password = "g";
             User repositoryUser = new() { Id = id, Name = "a", DisplayName = displayname, Emailadres = "c@d.ef", Password = password, PasswordSalt = "h", Validated = true, Blocked = false };
@@ -628,7 +628,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         public void ValueAlreadyExistingValuesDoesNotEdit()
         {
             //arrange
-            const uint id = 1;
+            const int id = 1;
             User repositoryUser = new() { Id = id, Name = "a", DisplayName = "b", Emailadres = "c@d.ef", Password = "g", PasswordSalt = "h", Validated = true, Blocked = false };
             userRepositoryMock.Setup(m => m.Get(id)).Returns(Task.FromResult(repositoryUser));
             userRepositoryMock.Setup(m => m.Contains(It.IsAny<System.Linq.Expressions.Expression<Func<User, bool>>>())).Returns(Task.FromResult(true));
@@ -643,7 +643,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         public void UserAlreadyExistingValuesDoesNotEdit()
         {
             //arrange
-            const uint id = 1;
+            const int id = 1;
             User repositoryUser = new() { Id = id, Name = "a", DisplayName = "b", Emailadres = "c@d.ef", Password = "g", PasswordSalt = "h", Validated = true, Blocked = false };
             User user = new() { Id = id, DisplayName = "def", Emailadres = "ghi@jkl.mno", Password = "pqr" };
             userRepositoryMock.Setup(m => m.Get(id)).Returns(Task.FromResult(repositoryUser));
@@ -659,7 +659,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         public void ValueAlreadyExistingValuesReturnsFalse()
         {
             //arrange
-            const uint id = 1;
+            const int id = 1;
             User repositoryUser = new() { Id = id, Name = "a", DisplayName = "b", Emailadres = "c@d.ef", Password = "g", PasswordSalt = "h", Validated = true, Blocked = false };
             userRepositoryMock.Setup(m => m.Get(id)).Returns(Task.FromResult(repositoryUser));
             userRepositoryMock.Setup(m => m.Contains(It.IsAny<System.Linq.Expressions.Expression<Func<User, bool>>>())).Returns(Task.FromResult(true));
@@ -674,7 +674,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         public void UserAlreadyExistingValuesReturnsFalse()
         {
             //arrange
-            const uint id = 1;
+            const int id = 1;
             User repositoryUser = new() { Id = id, Name = "a", DisplayName = "b", Emailadres = "c@d.ef", Password = "g", PasswordSalt = "h", Validated = true, Blocked = false };
             User user = new() { Id = id, DisplayName = "def", Emailadres = "ghi@jkl.mno", Password = "pqr" };
             userRepositoryMock.Setup(m => m.Get(id)).Returns(Task.FromResult(repositoryUser));
@@ -691,7 +691,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         public void ValueHashingPasswordCallsInterface()
         {
             //arrange
-            const uint id = 1;
+            const int id = 1;
             const string displayname = "b";
             const string emailadress = "c@d.ef";
             const string passwordSalt = "hij";
@@ -709,7 +709,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         public void UserHashingPasswordCallsInterface()
         {
             //arrange
-            const uint id = 1;
+            const int id = 1;
             const string displayname = "b";
             const string emailadress = "c@d.ef";
             const string passwordSalt = "hij";
@@ -728,7 +728,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         public void ValueHashingPasswordAltersPassword()
         {
             //arrange
-            const uint id = 1;
+            const int id = 1;
             const string displayname = "b";
             const string emailadress = "c@d.ef";
             const string passwordSalt = "hij";
@@ -748,7 +748,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         public void UserHashingPasswordAltersPassword()
         {
             //arrange
-            const uint id = 1;
+            const int id = 1;
             const string displayname = "b";
             const string emailadress = "c@d.ef";
             const string passwordSalt = "hij";

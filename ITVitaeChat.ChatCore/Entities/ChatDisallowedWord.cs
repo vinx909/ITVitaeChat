@@ -8,7 +8,7 @@ namespace ITVitaeChat.ChatCore.Entities
 {
     public class ChatDisallowedWord
     {
-        public uint Id { get; set; }
+        public int Id { get; set; }
         public string Content { get; set; }
     }
 }

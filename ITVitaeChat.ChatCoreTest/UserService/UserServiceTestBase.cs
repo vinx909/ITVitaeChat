@@ -14,11 +14,13 @@ namespace ITVitaeChat.ChatCoreTest.UserService
         protected readonly IUserService sut;
         protected readonly Mock<IRepository<User>> userRepositoryMock;
         protected readonly Mock<IHashAndSaltService> hashAndSaltMock;
+        protected readonly Mock<IChatGroupUserService> groupUserServiceMock;
 
         public UserServiceTestBase()
         {
             userRepositoryMock = new();
             hashAndSaltMock = new();
+            groupUserServiceMock = new();
             sut = new ChatCore.Services.UserService(userRepositoryMock.Object, hashAndSaltMock.Object);
         }
     }

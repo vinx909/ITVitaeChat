@@ -9,10 +9,11 @@ namespace ITVitaeChat.ChatCore.Interfaces
 {
     public interface IChatGroupService
     {
-        public Task<bool> Create(string name, int maxUser, ChatgroupVisibility visibility, string password, uint userId);
-        public Task<bool> Create(string name, ChatgroupVisibility visibility, string password, uint userId);
-        public Task<bool> Create(string name, int maxUser, uint userId);
-        public Task<bool> Create(string name, uint userId);
-        public Task<bool> Exist(uint groupId);
+        public Task<bool> Create(string name, int maxUser, ChatGroupVisibility visibility, string password, int userId, IChatGroupUserService chatgroupUserService = null);
+        public Task<bool> Create(string name, ChatGroupVisibility visibility, string password, int userId, IChatGroupUserService chatgroupUserService = null);
+        public Task<bool> Create(string name, int maxUser, int userId, IChatGroupUserService chatgroupUserService = null);
+        public Task<bool> Create(string name, int userId, IChatGroupUserService groupUserService = null);
+        public Task<bool> Exists(int groupId);
+        public Task<bool> Remove(int groupId, IChatGroupUserService groupUserService = null);
     }
 }

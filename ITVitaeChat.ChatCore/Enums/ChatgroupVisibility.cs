@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ITVitaeChat.ChatCore.Enums
 {
-    public enum ChatgroupVisibility
+    public enum ChatGroupVisibility
     {
         Private,
         Public

@@ -14,13 +14,13 @@ namespace ITVitaeChat.ChatInfrastructure
     {
         public ChatMessageRepository(ITVitaeChatDbContext dbContext) : base(dbContext) { }
 
-        public async Task<IEnumerable<ChatMessage>> GetPage(uint chatgroup, int amountPerPage, int page)
+        public async Task<IEnumerable<ChatMessage>> GetPage(int chatGroup, int amountPerPage, int page)
         {
-            return await dbContext.Set<ChatMessage>().Where(m => m.ChatgroupId == chatgroup).OrderByDescending(m => m.SendTime).Skip(amountPerPage * page).Take(amountPerPage).ToArrayAsync();
+            return await dbContext.Set<ChatMessage>().Where(m => m.ChatgroupId == chatGroup).OrderByDescending(m => m.SendTime).Skip(amountPerPage * page).Take(amountPerPage).ToArrayAsync();
         }
 
         public async Task<IEnumerable<ChatMessage>> SearchPage(Expression<Func<ChatMessage, bool>> query, int amountPerPage, int page)
-        {
+        { 
             return await dbContext.Set<ChatMessage>().Where(query).OrderByDescending(m => m.SendTime).Skip(amountPerPage * page).Take(amountPerPage).ToArrayAsync();
         }
     }

@@ -9,14 +9,14 @@ using Moq;
 
 namespace ITVitaeChat.ChatCoreTest.ChatgroupUserService
 {
-    public abstract class ChatgroupUserServiceTestBase
+    public abstract class ChatGroupUserServiceTestBase
     {
-        protected readonly IChatgroupUserService sut;
-        protected readonly Mock<IRepository<ChatgroupUser>> groupUserRepositoryMock;
+        protected readonly IChatGroupUserService sut;
+        protected readonly Mock<IRepository<ChatGroupUser>> groupUserRepositoryMock;
         protected readonly Mock<IChatGroupService> groupServiceMock;
         protected readonly Mock<IUserService> userServiceMock;
 
-        public ChatgroupUserServiceTestBase()
+        public ChatGroupUserServiceTestBase()
         {
             groupUserRepositoryMock = new();
             groupServiceMock = new();

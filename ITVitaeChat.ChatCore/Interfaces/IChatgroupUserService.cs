@@ -7,9 +7,11 @@ using ITVitaeChat.ChatCore.Entities;
 
 namespace ITVitaeChat.ChatCore.Interfaces
 {
-    public interface IChatgroupUserService
+    public interface IChatGroupUserService
     {
-        public Task<bool> Exists(uint groupId, uint senderId);
-        public Task<bool> Add(uint groupId, uint userId);
+        public Task<bool> Exists(int groupId, int senderId);
+        public Task<bool> Add(int groupId, int userId);
+        public Task<bool> Remove(int groupid, int userId);
+        public Task<IEnumerable<int>> GetGroupUsers(int groupId);
     }
 }

@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace ITVitaeChat.ChatCore.Entities
 {
-    public class ChatgroupUser
+    public class ChatGroupUser
     {
-        public uint UserId { get; set; }
-        public uint ChatgroupId { get; set; }
+        public int UserId { get; set; }
+        public int ChatgroupId { get; set; }
         public User User { get; set; }
-        public Chatgroup Chatgroup { get; set; }
+        public ChatGroup Chatgroup { get; set; }
     }
 }

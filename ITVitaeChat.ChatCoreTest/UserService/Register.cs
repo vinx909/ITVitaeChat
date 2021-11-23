@@ -12,7 +12,7 @@ namespace ITVitaeChat.ChatCoreTest.UserService
     public class Register : UserServiceTestBase
     {
         [Fact]
-        public void AddWithFullUser()
+        public void UserAddWithFullUser()
         {
             //arrange
             User user = new() { Name = "abc", DisplayName = "def", Emailadres = "ghi@jkl.mno", Password = "pqr" };
@@ -24,7 +24,23 @@ namespace ITVitaeChat.ChatCoreTest.UserService
             userRepositoryMock.Verify(m => m.Add(user), Times.Once);
         }
         [Fact]
-        public void ReturnsTrueWithFullUser()
+        public void ValuesAddWithFullUser()
+        {
+            //arrange
+            const string name = "abc";
+            const string displayName = "def";
+            const string emailadres = "ghi@jkl.mno";
+            const string password = "pqr";
+
+            //act
+            sut.Register(name, displayName, emailadres, password).Wait();
+
+            //assert
+            userRepositoryMock.Verify(m => m.Add(It.Is<User>(u => u.Name == name && u.DisplayName == displayName && u.Emailadres == emailadres)), Times.Once);
+        }
+
+        [Fact]
+        public void UserReturnsTrueWithFullUser()
         {
             //arrange
             User user = new() { Name = "abc", DisplayName = "def", Emailadres = "ghi@jkl.mno", Password = "pqr" };
@@ -34,6 +50,38 @@ namespace ITVitaeChat.ChatCoreTest.UserService
 
             //assert
             Assert.True(result);
+        }
+        [Fact]
+        public void ValuesReturnsTrueWithFullUser()
+        {
+            //arrange
+            const string name = "abc";
+            const string displayName = "def";
+            const string emailadres = "ghi@jkl.mno";
+            const string password = "pqr";
+
+            //act
+            bool result = sut.Register(name, displayName, emailadres, password).Result;
+
+            //assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void AddWithFullUserAddsToGeneralChat()
+        {
+            //arrange
+            int? userId = 3;
+            const int generalGroupId = 1;
+            User user = new() { Name = "abc", DisplayName = "def", Emailadres = "ghi@jkl.mno", Password = "pqr" };
+            userRepositoryMock.Setup(m => m.Add(user)).Returns(Task.FromResult(userId));
+
+            //act
+            sut.Register(user, groupUserServiceMock.Object).Wait();
+
+            //assert
+            groupUserServiceMock.Verify(m => m.Add(It.IsAny<int>(), It.IsAny<int>()), Times.Once);
+            groupUserServiceMock.Verify(m => m.Add(generalGroupId, (int)userId), Times.Once);
         }
 
         [Theory]

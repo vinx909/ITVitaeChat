@@ -13,8 +13,8 @@ namespace ITVitaeChat.ChatCoreTest.ChatgroupService
     {
         protected readonly IChatGroupService sut;
 
-        protected readonly Mock<IRepository<Chatgroup>> groupRepositoryMock;
-        protected readonly Mock<IChatgroupUserService> groupUserServiceMock;
+        protected readonly Mock<IRepository<ChatGroup>> groupRepositoryMock;
+        protected readonly Mock<IChatGroupUserService> groupUserServiceMock;
         protected readonly Mock<IHashAndSaltService> hashAndSaltServiceMock;
         protected readonly Mock<IUserService> userServiceMock;
 
@@ -25,7 +25,7 @@ namespace ITVitaeChat.ChatCoreTest.ChatgroupService
             hashAndSaltServiceMock = new();
             userServiceMock = new();
 
-            sut = new ChatCore.Services.ChatGroupService(groupRepositoryMock.Object, groupUserServiceMock.Object, hashAndSaltServiceMock.Object, userServiceMock.Object);
+            sut = new ChatCore.Services.ChatGroupService(groupRepositoryMock.Object, hashAndSaltServiceMock.Object, userServiceMock.Object);
         }
     }
 }

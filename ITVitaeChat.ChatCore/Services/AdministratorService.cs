@@ -10,7 +10,7 @@ namespace ITVitaeChat.ChatCore.Services
 {
     public class AdministratorService : IAdministratorService
     {
-        private IRepository<Administrator> administratorRepository;
+        private readonly IRepository<Administrator> administratorRepository;
 
         public AdministratorService(IRepository<Administrator> administratorRepository)
         {
@@ -27,7 +27,7 @@ namespace ITVitaeChat.ChatCore.Services
             return false;
         }
 
-        public async Task<Administrator> Get(uint id)
+        public async Task<Administrator> Get(int id)
         {
             return await administratorRepository.Get(id);
         }
