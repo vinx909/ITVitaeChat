@@ -9,6 +9,8 @@ using Microsoft.Identity.Web.Resource;
 using ITVitaeChat.ChatCore.Interfaces;
 using ITVitaeChat.ChatCore.Entities;
 using ITVitaeChat.ChatCore.Enums;
+using Microsoft.AspNetCore.Mvc.Filters;
+using AuthorizeAttribute = ITVitaeChat.WebCore.Authentication.AuthorizeAttribute;
 
 namespace ITVitaeChat.Api.Controllers
 {
@@ -30,8 +32,11 @@ namespace ITVitaeChat.Api.Controllers
         public async Task AddGroup(string name, int maxusers, ChatGroupVisibility visibility, string password)
         {
             //TODO get userId from token
-            int userId = 1;
-            await groupService.Create(name, maxusers, visibility, password, userId, groupUserService);
+            //if (int.TryParse(context.HttpContext.User.Identity.Name, out int userId))
+            //{
+                int userId = 1;
+                await groupService.Create(name, maxusers, visibility, password, userId, groupUserService);
+            //}
         }
 
         [HttpDelete("remove")]

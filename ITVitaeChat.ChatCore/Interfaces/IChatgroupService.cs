@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ITVitaeChat.ChatCore.Entities;
 using ITVitaeChat.ChatCore.Enums;
 
 namespace ITVitaeChat.ChatCore.Interfaces
@@ -15,5 +16,6 @@ namespace ITVitaeChat.ChatCore.Interfaces
         public Task<bool> Create(string name, int userId, IChatGroupUserService groupUserService = null);
         public Task<bool> Exists(int groupId);
         public Task<bool> Remove(int groupId, IChatGroupUserService groupUserService = null);
+        public Task<IEnumerable<ChatGroup>> GetModeratedGroups(int moderatorId);
     }
 }

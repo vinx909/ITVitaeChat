@@ -6,6 +6,9 @@ using ITVitaeChat.ChatCore.Entities;
 using ITVitaeChat.ChatCore.Interfaces;
 using ITVitaeChat.ChatCore.Services;
 using ITVitaeChat.ChatInfrastructure;
+using ITVitaeChat.WebCore.Interfaces;
+using ITVitaeChat.WebCore.Models;
+using ITVitaeChat.WebCore.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -37,6 +40,8 @@ namespace ITVitaeChat.Api
         {
             //services.AddIdentity<User, IdentityRole>();
 
+            /*test att TODO remove*/services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+
             services.AddScoped<IAdministratorService, AdministratorService>();
             services.AddScoped<IChatDisallowedWordsService, ChatDisallowedWordsService>();
             services.AddScoped<IChatGroupService, ChatGroupService>();
@@ -50,6 +55,7 @@ namespace ITVitaeChat.Api
             services.AddScoped<IRepository<ChatGroupUser>, Repository<ChatGroupUser>>();
             services.AddScoped<IRepository<User>, Repository<User>>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IJwtService, JwtService>();
             services.AddDbContext<ITVitaeChatDbContext>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -78,6 +84,9 @@ namespace ITVitaeChat.Api
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseCookiePolicy();
+            app.UseMiddleware<JwtMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

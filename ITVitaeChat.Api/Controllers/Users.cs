@@ -9,70 +9,126 @@ using Microsoft.Identity.Web.Resource;
 using ITVitaeChat.ChatCore.Interfaces;
 using ITVitaeChat.ChatCore.Entities;
 using System.Security.Claims;
+using ITVitaeChat.WebCore.Interfaces;
+using ITVitaeChat.WebCore.Enums;
+using AuthorizeAttribute = ITVitaeChat.WebCore.Authentication.AuthorizeAttribute;
 
 namespace ITVitaeChat.Api.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("[controller]")]
     public class Users : ControllerBase
     {
+        private readonly IAdministratorService administratorService;
+        private readonly IChatGroupService groupService;
         private readonly IChatGroupUserService groupUserService;
         private readonly IUserService userService;
+        private readonly IJwtService jwtService;
 
-        public Users(IChatGroupUserService groupUserService, IUserService userService)
+        public Users(IAdministratorService administratorService, IChatGroupService groupService, IChatGroupUserService groupUserService, IUserService userService, IJwtService jwtService)
         {
+            this.administratorService = administratorService;
+            this.groupService = groupService;
             this.userService = userService;
             this.groupUserService = groupUserService;
+            this.jwtService = jwtService;
         }
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<bool> Register(string name, string username, string emailaddress, string password)
+        public async Task<IActionResult> Register(string name, string username, string emailaddress, string password)
         {
-            return await userService.Register(name, username, emailaddress, password, groupUserService);
+            if (await userService.Register(name, username, emailaddress, password, groupUserService))
+            {
+                return Accepted();
+            }
+            else
+            {
+                return BadRequest();
+                //TODO add specific reactions for specific reasons it wasn't added
+            }
         }
 
-        //TODO incorrect return but currently no clue how to send a token
         [HttpPost("token")]
         [AllowAnonymous]
         public async Task<IActionResult> Login(string username, string password)
         {
-            User user = (await userService.Login(username, password)).Item2;
-            if(user == null)
+            (ChatCore.Enums.LoginResult, User) loginAttemp = await userService.Login(username, password);
+
+            switch (loginAttemp.Item1)
             {
-                return Unauthorized();
+                case ChatCore.Enums.LoginResult.loggedIn:
+                    User user = loginAttemp.Item2;
+
+                    var role = GetRole(user);
+
+                    List<Claim> claims = new()
+                    {
+                        new(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                        new(ClaimTypes.Name, user.DisplayName),
+                        new(ClaimTypes.Email, user.Emailadres),
+                        new(ClaimTypes.Role, (await role).ToString())
+                    };
+
+                    return Ok(new
+                    {
+                        token = jwtService.Generate(claims)
+                    });
+                case ChatCore.Enums.LoginResult.blocked:
+                    return Forbid();
+                case ChatCore.Enums.LoginResult.notValidated:
+                    return UnprocessableEntity();
+                case ChatCore.Enums.LoginResult.usernameNotFound:
+                    return NotFound();
+                case ChatCore.Enums.LoginResult.incorrectPassword:
+                    return Unauthorized();
+                case ChatCore.Enums.LoginResult.incompleteData:
+                    return BadRequest();
             }
-
-            List<Claim> claims = new()
-            {
-                new(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new(ClaimTypes.Name, user.DisplayName),
-                new(ClaimTypes.Email, user.Emailadres)
-            };
-
-            //var identity = new ClaimsIdentity(claims)
-            //return user;
             throw new NotImplementedException();
         }
 
+
         //TODO incorrect return but currently unsure exactly how to check for who's online (should be simple with identity but have no clue how that works) nor exactly sure what the return should be.
         [HttpGet("list")]
-        public async Task<IEnumerable<User>> LoggedinUsers()
+        [Authorize(Roles.user)]
+        public async Task<ActionResult<IEnumerable<User>>> LoggedinUsers()
         {
             throw new NotImplementedException();
         }
 
         [HttpGet("block/{id}")]
-        public async Task Block([FromRoute] int id)
+        [Authorize(Roles.administrator)]
+        public async Task<IActionResult> Block([FromRoute] int id)
         {
-            await userService.Block(id);
+            if(await userService.Block(id))
+            {
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
         [HttpPut]
         public async Task Edit(int id, string username, string password, string emailadres)
         {
             await userService.Edit(id, username, password, emailadres);
+        } 
+
+        private async Task<Roles> GetRole(User user)
+        {
+            if((await administratorService.Get(user.Id)) != null)
+            {
+                return Roles.administrator;
+            }
+            if((await groupService.GetModeratedGroups(user.Id)).Any())
+            {
+                return Roles.moderator;
+            }
+            return Roles.user;
         }
     }
 }

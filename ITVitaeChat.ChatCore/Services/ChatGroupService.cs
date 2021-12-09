@@ -87,6 +87,11 @@ namespace ITVitaeChat.ChatCore.Services
             return await chatgroupRepository.Contains(groupId);
         }
 
+        public async Task<IEnumerable<ChatGroup>> GetModeratedGroups(int moderatorId)
+        {
+            return await chatgroupRepository.GetAll(g => g.ModeratorId == moderatorId);
+        }
+
         public async Task<bool> Remove(int groupId, IChatGroupUserService groupUserService = null)
         {
             ChatGroup group = await chatgroupRepository.Get(groupId);

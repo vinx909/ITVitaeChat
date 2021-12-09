@@ -20,6 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ITVitaeChat.ChatCore\ITVitaeChat.ChatCore.csproj" />
     <ProjectReference Include="..\ITVitaeChat.ChatInfrastructure\ITVitaeChat.ChatInfrastructure.csproj" />
+    <ProjectReference Include="..\ITVitaeChat.WebCore\ITVitaeChat.WebCore.csproj" />
   </ItemGroup>
 
 </Project>

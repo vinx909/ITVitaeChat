@@ -56,7 +56,7 @@ namespace ITVitaeChat.ChatCore.Services
 
         public async Task<IEnumerable<int>> GetGroupUsers(int groupId)
         {
-            IEnumerable<ChatGroupUser> groupUsers = groupUserRepository.GetAll(g => g.ChatgroupId.Equals(groupId)).Result;
+            IEnumerable<ChatGroupUser> groupUsers = await groupUserRepository.GetAll(g => g.ChatgroupId.Equals(groupId));
             List<int> userIds = new();
             foreach (ChatGroupUser groupUser in groupUsers)
             {
